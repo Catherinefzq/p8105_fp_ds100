@@ -1,0 +1,15 @@
+---
+title: "p8105_fp_ds100"
+author: "Catherine"
+date: "11/5/2018"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.asp = .6,
+  out.width = "90%"
+)
+```
+
