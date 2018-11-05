@@ -16,6 +16,8 @@ knitr::opts_chunk$set(
 ```{r}
 test = c("Go! DS100!")
 test
+happy = 100
+happy
 ```
 
 
