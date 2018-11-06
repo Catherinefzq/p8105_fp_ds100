@@ -1,6 +1,6 @@
 ---
 title: "p8105_fp_ds100"
-author: "Yue Gu, Jianghui Lin, Junyuan Zheng, Jianyou Liu"
+author: "Yue Gu, Jianghui Lin, Junyuan Zheng, Jianyou Liu, Zhiqian Fang"
 date: "11/5/2018"
 output: github_document
 ---
@@ -11,24 +11,32 @@ knitr::opts_chunk$set(
   fig.asp = .6,
   out.width = "90%"
 )
+library(tidyverse)
 ```
 
 ## Proposal 
-(Writing proposal here!!)
-First, you will define your teams and propose a project. This proposal should be a half-page to a page in length and include:
 
-The group members (names and UNIs)
-The tentative project title: mortality
+#### The group members (names and UNIs) 
+```{r, echo = FALSE}
+names = c("Yue Gu", "Jianghui Lin", "Junyuan Zheng", "Jianyou Liu", "Zhiqian Fang")
+uni = c("yg2625", "jl5172", "jz3036", "jl5296", "zf2212")
+rbind(names, uni) %>% 
+  knitr::kable()
+```
 
-first_name: Junyuan
-last_name_name: Zheng
+#### The tentative project title
 
-The tentative project title
-The motivation for this project
-The intended final products
-The anticipated data sources
-The planned analyses / visualizations / coding challenges
-The planned timeline
+Title: __1999 - 2016 U.S. Injury Mortality Analysis__
+
+#### The motivation for this project
+
+Motivation: 
+
+#### The intended final products
+#### The anticipated data sources
+#### The planned analyses / visualizations / coding challenges
+#### The planned timeline
+
 There should be one proposal per group, written collaboratively using .Rmd (rendering to a GH document) in a dedicated GitHub repo. Conceptually, this is intended to review a project that is 10% complete.
 
 
