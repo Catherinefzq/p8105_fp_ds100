@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 First, you will define your teams and propose a project. This proposal should be a half-page to a page in length and include:
 
 The group members (names and UNIs)
-The tentative project title
+The tentative project title: mortality
 The motivation for this project
 The intended final products
 The anticipated data sources
