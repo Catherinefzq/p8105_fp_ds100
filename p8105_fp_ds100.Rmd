@@ -18,7 +18,6 @@ knitr::opts_chunk$set(
 First, you will define your teams and propose a project. This proposal should be a half-page to a page in length and include:
 
 The group members (names and UNIs)
-<<<<<<< HEAD
 The tentative project title: mortality
 
 first_name: Junyuan
