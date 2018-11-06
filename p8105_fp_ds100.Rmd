@@ -20,13 +20,11 @@ First, you will define your teams and propose a project. This proposal should be
 The group members (names and UNIs)
 <<<<<<< HEAD
 The tentative project title: mortality
-=======
 
 first_name: Junyuan
 last_name_name: Zheng
 
 The tentative project title
->>>>>>> bc208b035481bc47fd5bd1622e5b36420e6023f1
 The motivation for this project
 The intended final products
 The anticipated data sources
