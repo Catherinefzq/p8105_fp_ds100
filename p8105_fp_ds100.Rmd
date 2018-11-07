@@ -26,8 +26,8 @@ rbind(names, uni) %>%
 
 #### Project title and Data source
 
-Title: __1999 - 2016 U.S. Self-Inflicted Suicide Mortality Analysis__  
-Data: https://data.cdc.gov/NCHS/NCHS-Injury-Mortality-United-States/nt65-c7a7
+Title: __1999 - 2016 U.S. Self-Inflicted Suicide Mortality Analysis__    
+[Data: https://data.cdc.gov/NCHS/NCHS-Injury-Mortality-United-States/nt65-c7a7]
 
 #### Motivation  
 Suicide is a leading cause of death in the US. Suicide rates increased in nearly every state from 1999 through 2016. Mental health conditions are often seen as the cause of suicide, but suicide is rarely caused by any single factor. In fact, many people who die by suicide are not known to have a diagnosed mental health condition at the time of death. We are interested in examining the variations of suicide death rates among different categorical variables such as gender, race, age group, and to test if the observed differences are statistically significant combined with the analysis to age specific rate and related confidence interval.
