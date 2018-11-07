@@ -26,12 +26,12 @@ rbind(names, uni) %>%
 
 #### The tentative project title
 
-Title: __1999 - 2016 U.S. Injury Mortality Analysis__
+Title: __1999 - 2016 U.S. Self-Inflicted Suicide Mortality Analysis__
 
 #### The motivation for this project
 
 Motivation: 
-Suicide is a leading cause of death in the US. Suicide rates increased in nearly every state from 1999 through 2016. Mental health conditions are often seen as the cause of suicide, but suicide is rarely caused by any single factor. In fact, many people who die by suicide are not known to have a diagnosed mental health condition at the time of death.
+Suicide is a leading cause of death in the US. Suicide rates increased in nearly every state from 1999 through 2016. Mental health conditions are often seen as the cause of suicide, but suicide is rarely caused by any single factor. In fact, many people who die by suicide are not known to have a diagnosed mental health condition at the time of death. We are interested in examining the variations of suicide death rates among different categorical variables such as gender, race, age group, and to test if the observed differences are statistically significant.
 
 #### The intended final products
 
@@ -41,8 +41,15 @@ We will first present the trend of injury intent from 1999 to 2016 over all ages
 https://data.cdc.gov/NCHS/NCHS-Injury-Mortality-United-States/nt65-c7a7
 
 #### The planned analyses / visualizations / coding challenges
-We aim to analyze the suicide rate changes from 1999-2016 across different ages/races.
+We aim to analyze the suicide rate changes from 1999-2016 across different ages/races, create graphs to display the trends visually, and conduct formal statistical analysis to decide whether or not the results are significant. 
+
 #### The planned timeline
+```{r time_table, echo = FALSE}
+Time_Period = c("Nov 5-8", "Nov 8-15", "Nov 15-22", "Nov 22- Dec 6", "Dec 6")
+Task = c("Research on background of dataset, read relevant references, and understand its structure and variables", "Work on report - Load, clean, manipulate data; Create visualizations", "Work on report - Perform statistical analysis and summarize findings/conclusions", "Work on website construction and screencast; Finalize report", "Submit everything!")
+cbind(Time_Period, Task) %>% 
+  knitr::kable()
+```
 
 
 
