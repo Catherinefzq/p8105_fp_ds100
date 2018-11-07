@@ -16,7 +16,7 @@ library(tidyverse)
 
 ## Proposal 
 
-#### The group members (names and UNIs) 
+#### Group members (names and UNIs) 
 ```{r, echo = FALSE}
 names = c("Yue Gu", "Jianghui Lin", "Junyuan Zheng", "Jianyou Liu", "Zhiqian Fang")
 uni = c("yg2625", "jl5172", "jz3036", "jl5296", "zf2212")
@@ -38,7 +38,7 @@ The final product of this project would be presented as a website containing dis
 #### Planned analyses / visualizations / coding challenges  
 We aim to analyze the suicide rate changes from 1999-2016 across different ages/races, create graphs to display the trends visually, and conduct formal statistical analysis to test the significance of related affecting factors to age-specific death rate including sex, gender, race, age and etc. Coding challenges may include choosing the correct statistical test for different types of variables; clear visulizations for data output; and website pages construction in github.
 
-#### The planned timeline  
+#### Planned timeline  
 ```{r time_table, echo = FALSE}
 Time_Period = c("11/05-11/08", "11/08-11/15", "11/15-11/22", "11/22-12/06", "12/06")
 Task = c("Research on background and relevant references of datasets, understand its structure and variables", "Load, clean, manipulate data; Create visualizations", "Work on report - Perform statistical analysis and summarize findings/conclusions", "Website construction and screencast; Finalize report", "Final Submission")
