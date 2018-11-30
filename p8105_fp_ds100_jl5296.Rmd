@@ -1,0 +1,22 @@
+---
+title: "Untitled"
+author: "Jianyou Liu"
+date: "November 30, 2018"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+knitr::opts_chunk$set(echo = TRUE)
+
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.asp = .6,
+  out.width = "90%"
+)
+
+theme_set(theme_bw() + theme(legend.position = "bottom"))
+
+
+```
+
