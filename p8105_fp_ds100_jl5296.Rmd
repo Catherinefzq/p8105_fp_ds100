@@ -20,3 +20,55 @@ theme_set(theme_bw() + theme(legend.position = "bottom"))
 
 ```
 
+## Age Group VS. Depression Rate
+### brfss dataset
+
+#### Load data
+```{r read_data, message = FALSE}
+brfss_data = read_csv("./data/brfss_data.csv") %>% 
+  janitor::clean_names()
+View(brfss_data)
+```
+#### Modify data
+```{r modify_data}
+new_brfss_data = brfss_data %>% 
+  select(year, locationabbr, locationdesc, age_group, topic, response, sample_size, data_value, confidence_limit_low, confidence_limit_high) %>% 
+  filter(!is.na(age_group)) %>% 
+  unite(locationabbr, locationdesc, col = "state_city", sep = ",")
+
+age_data = new_brfss_data %>% 
+  filter(response == "Yes") %>% 
+  mutate(tot_sample_size = ceiling(sample_size/(data_value/100))) %>% 
+  select(year, state_city, age_group, sample_size, tot_sample_size, data_value, confidence_limit_low, confidence_limit_high) %>% 
+  rename(depress_num = sample_size, depress_rate = data_value) %>% 
+  group_by(age_group) %>%
+  summarize(total_dep = sum(depress_num, na.rm = TRUE), total_num = sum(tot_sample_size, na.rm = TRUE))
+  
+```
+#### Estimate depression proportion for each age group
+```{r prop_test}
+# Run prop.test for each age group
+test_data = age_data %>% 
+  mutate(test_stats = map2(.x = total_dep, .y = total_num, ~ prop.test(x = .x, n = .y, conf.level = .95) %>% broom::tidy())) %>% 
+  unnest() %>% 
+  select(age_group, total_dep, total_num, estimate, conf.low, conf.high)
+```
+#### Create plot to show estimated depression rate and CIs for age group
+```{r plot}
+test_data %>% 
+  mutate(age_group = fct_reorder(age_group, estimate)) %>% 
+  ggplot(aes(x = age_group, y = estimate, color = age_group)) +
+  geom_bar(stat = "identity", position = position_dodge(), width = .6) +
+  geom_errorbar(aes(ymin = conf.low , ymax = conf.high), width = .2) +
+  labs(
+    title = "Estimates of Proportion of Depression and CIs for each Age Category",
+    x = "Age Group",
+    y = "Estimated Depression Rate"
+  ) +
+  viridis::scale_color_viridis(
+    name = "Age Group",
+    discrete = TRUE
+  )
+  
+```
+**Comment**: According to the graph, the estimated depression rate is the highest among people aged between 55-64 and the lowest for those above 65.
