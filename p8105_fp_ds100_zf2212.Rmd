@@ -5,7 +5,48 @@ date: "11/30/2018"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-x = 1
+
+```{r setup}
+library(tidyverse)
+
+```
+
+```{r import nchs data}
+nchs_raw = read_csv("data/NCHS_-_Injury_Mortality__United_States.csv") %>% janitor::clean_names()
+```
+
+```{r tidy data}
+nchs_suicide = nchs_raw %>% 
+  mutate(death_rate = round((deaths/population)*100000, digits = 3)) %>% 
+  select(year, race, sex, age_group_years, injury_mechanism, injury_intent, death_rate) %>%
+  filter(!race == "All races",
+         injury_mechanism == "All Mechanisms",
+         age_group_years == "All Ages",
+         sex == "Both sexes",
+         injury_intent == "Suicide") %>% 
+  group_by(year, injury_intent) 
+
+```
+
+```{r plot}
+nchs_suicide %>% ggplot(aes(x = year, y = death_rate, color = race)) +
+  geom_point() +
+  geom_line()
+```
+
+Non-Hispanic White has the highest deaths rate of suicide compared to two other race groups.
+As this is the death rate of suicide, we need to take a look if we can find some connection to depression or other.
+
+__Research__: Depression is involved in more than two-thirds of the 30,000 suicides that occur in the United States every year. For every two homicides, there are three suicides. "Elderly men may feel especially hopeless when their bodies break down with illness because it can destroy their sense of masculinity," says Lieberman. That may be why the highest suicide rate among Americans is in white men who are 85 or older, many of whom may have a depressive illness.
+
+_reference_: https://www.everydayhealth.com/hs/major-depression/depression-statistics/
+
+
+```{r brfss import}
+brfss = read_csv("./data/brfss_data.csv")
+```
+```{r}
+brfss = brfss
+  
 ```
 
