@@ -32,8 +32,8 @@ View(brfss_data)
 #### Modify data
 ```{r modify_data}
 new_brfss_data = brfss_data %>% 
+  filter(break_out_category_id == "CAT3") %>% 
   select(year, locationabbr, locationdesc, age_group, topic, response, sample_size, data_value, confidence_limit_low, confidence_limit_high) %>% 
-  filter(!is.na(age_group)) %>% 
   unite(locationabbr, locationdesc, col = "state_city", sep = ",")
 
 age_data = new_brfss_data %>% 
@@ -79,6 +79,48 @@ test_data %>%
 ### Injury Data
 #### Load dataset
 ```{r import_data, message = FALSE}
-injury_data = read_csv("./data/NCHS_-_Injury_Mortality__United_States.csv")
+injury_data = read_csv("./data/NCHS_-_Injury_Mortality__United_States.csv") %>% 
+  janitor::clean_names()
+```
+#### Clean and manipulate data
+```{r tidy_data}
+new_injury_data = injury_data %>% 
+  select(year, age_group_years, injury_intent, deaths, population) %>% 
+  distinct(year, age_group_years, injury_intent, .keep_all = TRUE) %>% 
+  filter(injury_intent == "Suicide", age_group_years != "All Ages", year %in% c(2011, 2012, 2013, 2014, 2015, 2016)) %>% 
+  arrange(year) %>% 
+  mutate(age_group_years = str_replace(age_group_years, "15–24","<25"),age_group_years = str_replace(age_group_years, "< 15","<25"
+), age_group_years = str_replace(age_group_years, "65–74","65+"), age_group_years = str_replace(age_group_years, "75+","65")) %>% 
+  group_by(age_group_years) %>% 
+  summarize(tot_suicide_deaths = sum(deaths), tot_pop = sum(population))
+  
+```
+#### Obtain estimated suicide death rate and CIs
+```{r prop_test2}
+test_data2 = new_injury_data %>% 
+  mutate(test_stats = map2(.x = tot_suicide_deaths, .y = tot_pop, ~ prop.test(x = .x, n = .y, conf.level = .95) %>% broom::tidy())) %>% 
+  unnest() %>% 
+  select(age_group_years, tot_suicide_deaths, tot_pop, estimate, conf.low, conf.high) %>% 
+  mutate(estimate = estimate*100000, conf.low = conf.low*100000, conf.high = conf.high*100000)
+
+```
+#### Create plot to show estimated suicide death rate for each age group
+```{r plot2}
+test_data2 %>% 
+  mutate(age_group_years = fct_reorder(age_group_years, estimate)) %>% 
+  ggplot(aes(x = age_group_years, y = estimate, color = age_group_years)) +
+  geom_bar(stat = "identity", position = position_dodge(), width = .6) +
+  geom_errorbar(aes(ymin = conf.low , ymax = conf.high), width = .2) +
+  labs(
+    title = "Estimated suicide death rate(per 100,000 population) and CIs for each Age Category",
+    x = "Age Group",
+    y = "Estimated Suicide Death Rate(per 100,000 population)"
+  ) +
+  viridis::scale_color_viridis(
+    name = "Age Group",
+    discrete = TRUE
+  )
+
 ```
 
+**Comment**: It appears that people aged between 45 and 64 have both the higest depression rate and also the highest suicide death rate compared with the other age groups.
