@@ -2,7 +2,7 @@
 title: "p8105_fp_ds100_zf2212"
 author: "Catherine"
 date: "11/30/2018"
-output: html_document
+output: github_document
 ---
 
 
