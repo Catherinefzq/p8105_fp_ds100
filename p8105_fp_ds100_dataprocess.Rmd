@@ -20,8 +20,6 @@ data_BRFSS =
 data_BRFSS %>% 
   select(., Question) %>%
   distinct(.,)
-  
-distinct(data_BRFSS$Question)
 ```
 
 ```{r}
