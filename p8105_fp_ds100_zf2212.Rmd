@@ -43,11 +43,19 @@ _reference_: https://www.everydayhealth.com/hs/major-depression/depression-stati
 
 
 ```{r brfss import}
-brfss = read_csv("./data/brfss_data.csv")
+brfss_raw = read_csv("./data/brfss_data.csv")
 ```
 ```{r}
-brfss = brfss
-  
+brfss = brfss_raw %>% 
+  filter(response == "Yes") %>%
+  filter(!is.na(`Race/Ethnicity`)) %>% 
+  select(year, response, data_value, `Race/Ethnicity`, location_id) %>% 
+  group_by(`Race/Ethnicity`)
+brfss[is.na(brfss)] = 0
+
+brfss %>% ggplot(aes(x = year, y = data_value, color = `Race/Ethnicity`)) + 
+  geom_point() +
+  geom_line() 
 ```
 
 
