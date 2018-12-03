@@ -7,5 +7,15 @@ output: github_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
 ```
 
+#### Load BRFSS & Injury Data
+```{r read_data, message = FALSE}
+brfss_data = read_csv("./data/brfss_data.csv") %>% 
+  janitor::clean_names()
+
+injury_data = read_csv("./data/NCHS_-_Injury_Mortality__United_States.csv") %>% 
+  janitor::clean_names()
+
+```
