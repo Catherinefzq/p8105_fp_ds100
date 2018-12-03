@@ -16,6 +16,8 @@ brfss_data = read_csv("./data/brfss_data.csv") %>%
   janitor::clean_names()
 
 injury_data = read_csv("./data/NCHS_-_Injury_Mortality__United_States.csv") %>% 
-  janitor::clean_names()
+  janitor::clean_names() %>% 
+  filter(injury_mechanism == "All Mechanisms",
+         injury_intent == "Suicide")
 
 ```
