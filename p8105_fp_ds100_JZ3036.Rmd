@@ -7,6 +7,7 @@ output: github_document
 
 ```{r packages}
 library(tidyverse)
+library(plotly)
 ```
 
 ```{r data_import}
@@ -172,7 +173,6 @@ data_IM_JZ %>%
   ggtitle('Suicide Death Rate from 2011-2016 by Age')
 ```
 
-
 ```{r IM_year_race}
 data_IM_JZ %>% 
   group_by(., year, race) %>%
@@ -180,6 +180,26 @@ data_IM_JZ %>%
   mutate(., death_rate = (sum_deaths / population),
     ci_low = death_rate - qnorm(.975) * sqrt(death_rate * (1 - death_rate) / population),
     ci_high = death_rate + qnorm(.975) * sqrt(death_rate * (1 - death_rate) / population)) %>% 
+  ggplot(., aes(x = year, y = death_rate, color = race)) +
+  geom_point() +
+  geom_line() +
+  geom_errorbar(aes(ymax = ci_high, ymin = ci_low), width = 0.5, alpha = 0.5) + 
+  theme(legend.position = 'right', legend.text = element_text(size=6), legend.box = 'vertical',
+        legend.key.size = unit(1, 'cm')) +
+  ggtitle('Suicide Death Rate from 2011-2016 by Age')
+```
+
+test:
+```{r IM_year_race}
+data_IM_JZ %>% 
+  group_by(., year, race) %>%
+  summarize(., sum_deaths = sum(deaths), population = sum(population)) %>% 
+  mutate(., death_rate = (sum_deaths / population),
+    ci_low = death_rate - qnorm(.975) * sqrt(death_rate * (1 - death_rate) / population),
+    ci_high = death_rate + qnorm(.975) * sqrt(death_rate * (1 - death_rate) / population)) %>%
+  plot_ly(y = ~death_rate, x = ~year, color = ~race, type = 'scatter', mode = 'line+marker',
+          error_y = ~list(array = c(ci_high - death_rate)))
+  
   ggplot(., aes(x = year, y = death_rate, color = race)) +
   geom_point() +
   geom_line() +
