@@ -16,8 +16,22 @@ brfss_data = read_csv("./data/brfss_data.csv") %>%
   janitor::clean_names()
 
 injury_data = read_csv("./data/NCHS_-_Injury_Mortality__United_States.csv") %>% 
-  janitor::clean_names() %>% 
+  janitor::clean_names()
+  
+
+new_injury = 
+  injury_data %>% 
   filter(injury_mechanism == "All Mechanisms",
-         injury_intent == "Suicide")
+         injury_intent == "Suicide",
+         year  %in%  c(2011, 2012, 2013, 2014, 2015, 2016),
+         age_group_years != "All Ages",
+         race != "All races",
+         sex != "Both sexes") %>%
+  mutate(suicide_dr = (deaths / population) * 100000) %>% 
+  select(year, sex, age_group_years, race, suicide_dr)
+  
+  
+  
+
 
 ```
