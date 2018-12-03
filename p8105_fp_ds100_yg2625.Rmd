@@ -41,5 +41,9 @@ new_injury =
 ```{r lm}
 fit_suicide = lm(suicide_dr ~ sex + race + age_group_years + year, data = new_injury)
 summary(fit_suicide)
+
+pairwise.t.test(new_injury$suicide_dr, new_injury$age_group_years, p.adj = 'bonferroni')
+
+fit_suicide %>% aov(.) %>%  TukeyHSD()
 ```
 
