@@ -36,4 +36,8 @@ new_injury =
          age_group_years = as.factor(age_group_years))
   
 ```
+#### Construct a regression model using 'suicide death rate' as the outcome of interest with 'sex', 'age group' and 'race' being its predictors
+```{r lm}
+
+```
 
