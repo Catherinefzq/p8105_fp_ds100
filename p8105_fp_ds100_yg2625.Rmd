@@ -9,7 +9,7 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 ```
-
+### Regression Model Analysis
 #### Load BRFSS & Injury Data
 ```{r read_data, message = FALSE}
 brfss_data = read_csv("./data/brfss_data.csv") %>% 
@@ -17,8 +17,10 @@ brfss_data = read_csv("./data/brfss_data.csv") %>%
 
 injury_data = read_csv("./data/NCHS_-_Injury_Mortality__United_States.csv") %>% 
   janitor::clean_names()
-  
 
+```
+#### Convert variables into 'factor' to fit a linear model
+```{r convert_var}
 new_injury = 
   injury_data %>% 
   filter(injury_mechanism == "All Mechanisms",
@@ -33,8 +35,5 @@ new_injury =
          race = as.factor(ifelse(race == "Non-Hispanic white", "white", "non-white")),
          age_group_years = as.factor(age_group_years))
   
-  
-  
-
-
 ```
+
