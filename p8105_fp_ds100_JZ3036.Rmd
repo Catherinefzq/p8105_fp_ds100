@@ -124,14 +124,14 @@ data_IM_JZ = data_IM %>%
 data_IM_JZ %>% 
   mutate(., age_group_years = str_replace(age_group_years, '< 15', '< 25'),
             age_group_years = str_replace(age_group_years, '15–24', '< 25'),
-            age_group_years = str_replace(age_group_years, '65–74', '64+'),
-            age_group_years = str_replace(age_group_years, '75+', '64')) %>% 
+            age_group_years = str_replace(age_group_years, '65–74', '65+'),
+            age_group_years = str_replace(age_group_years, '75+', '65')) %>% 
   group_by(., year, age_group_years) %>% 
   summarize(., deaths = sum(deaths), population = sum(population)) %>% 
   mutate(., death_rate = (deaths / population),
     ci_low = death_rate - qnorm(.975) * sqrt(death_rate * (1 - death_rate) / population),
     ci_high = death_rate + qnorm(.975) * sqrt(death_rate * (1 - death_rate) / population)) %>%
-  mutate(., age = forcats::fct_relevel(age_group_years, c('< 25', '25–44', '45–64', '64+'))) %>% 
+  mutate(., age = forcats::fct_relevel(age_group_years, c('< 25', '25–44', '45–64', '65+'))) %>% 
   ggplot(., aes(x = year, y = death_rate, color = age_group_years)) +
   geom_point() +
   geom_line() +
@@ -158,7 +158,7 @@ data_IM_JZ %>%
   ggtitle('Suicide Death Rate from 2011-2016 by Age')
 ```
 
-```{r IM_year_race}
+```{r IM_year_race_DB}
 data_IM_JZ %>% 
   group_by(., year, race) %>%
   summarize(., sum_deaths = sum(deaths), population = sum(population)) %>% 

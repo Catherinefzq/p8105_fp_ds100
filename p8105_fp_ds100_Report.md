@@ -42,10 +42,6 @@ library(tidyverse)
 data_BRFSS = 
   read_csv(file='./data/Behavioral_Risk_Factor_Surveillance_System__BRFSS__Prevalence_Data__2011_to_present_.csv')
 
-data_BRFSS %>% 
-  select(., Question) %>%
-  distinct(.,)
-
 brfss_data = brfss_raw %>% 
    filter(year %in% c(2011, 2012, 2013, 2014, 2015, 2016),
           break_out_category %in% c("Age Group", "Race/Ethnicity", "Gender")) %>% 
@@ -61,6 +57,37 @@ Exploratory analysis:
 =====================
 
 Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.
+
+``` r
+library(tidyverse)
+library(plotly)
+library(patchwork)
+data_BRFSS = 
+  read_csv(file = './data/brfss_data.csv')
+data_IM = 
+  read_csv(file = './data/NCHS_-_Injury_Mortality__United_States.csv')
+```
+
+Creat a new data from the original data just for this section, so that it won't affect other part of the analysis: For BRFSS dataset, select some variables that might be usful for later analysis:
+
+``` r
+data_BRFSS_JZ = data_BRFSS %>% 
+  janitor::clean_names(.) %>% 
+  select(., year, locationabbr, locationdesc, response, sample_size, age_group, gender, race_ethnicity)
+```
+
+For the Injury Mortality dataset, filter out 'Suicide' as our focus. Get rid of summarized rows for age, sex and race. Since the cases and total population do not differ by 'injury\_mechanism', here I use 'All Mechanisms' to prevend over counting for the population.
+
+``` r
+data_IM_JZ = data_IM %>% 
+  janitor::clean_names(.) %>% 
+  filter(., injury_intent == 'Suicide',
+    year == 2011 | year == 2012 | year == 2013 | year == 2014 | year == 2015 | year == 2016,
+    sex != 'Both sexes',
+    age_group_years != 'All Ages',
+    race != 'All races',
+    injury_mechanism == 'All Mechanisms')
+```
 
 Additional analysis:
 ====================

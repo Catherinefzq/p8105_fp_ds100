@@ -46,7 +46,7 @@ new_injury =
 ```
 #### Construct a regression model using 'suicide death rate' as the outcome of interest with 'sex', 'age group' and 'race' being its predictors
 ```{r lm}
-fit_suicide = lm(suicide_dr ~ sex + race + age_group_years, data = new_injury)
+fit_suicide = lm(suicide_dr ~ sex + race + age_group_years + year, data = new_injury)
 summary(fit_suicide)
 
 pairwise.t.test(new_injury$suicide_dr, new_injury$age_group_years, p.adj = 'bonferroni')
@@ -118,9 +118,38 @@ fit_race %>% aov(.) %>% TukeyHSD()
 
 ```
 
+## Anaysis Report
+To maintain comparability between injury mechanism and depression(brfss) data, we only generate statistic results for:  
 
+* race:
+    + Non-Hispanic Black
+    + Non-Hispanic White
+    + Hispanic
+* age groups(in years):
+    + < 25
+    + 25-44
+    + 45-64
+    + 65+
+* year 2011-2016
 
-  
+Using injury data, we first calculate suicide death rate by
+    
+$$\frac{Deaths}{Population} * 100000$$ 
+    
+which represents the number of deaths caused by suicide per 100,000 units population. Then, we transform sex, race, age, year into factor variables for future regression model building. Specifically, sex = 0 if it's male and sex = 1 if it's female.
+
+Then, we construct regression for suicide death rate as response, sex, race, age(in years), year as predictor. By observing the coefficients estimates and p-values, there is several interesting finds for suicide death rates:
+1. sex has **significant** p-value < 0.0001: there is significant difference of suicide rate between male and female group and female tends to have lower suicide death rate.   
+2. race of Non-Hispanic white has **significant** p-value *(with baseline group of Hispanic)*: there is significant difference of suicide rate between Non-hispanic Whites and Hispanic and Non-hispanic Black have non-significant difference with Hispanic. Whites tend to have higher suicide death rate compared to Hispanic and Blacks.   
+3. all groups of age(in years) have **significant** p-value *(with baseline group of age < 25)*: there is significant difference between all age groups with baseline age group(age < 25).    
+4. all years have **non-significant** p-value *(with baseline group of year 2011)*: there is not significant difference between all years with year 2011.   
+
+Then, we make pairwise comparison with Bonferroni and Tukey for race, age and year groups. Findings:   
+1.  __Race__: Non-Hispanic White and Hispanic, Non-Hispanic White and Black have significant different suicide death rate. White have the highest suicide death rate among 3 race groups. And Blacks have smaller suicide death rate compared to Hispanic and Whites.  
+2.  __Age__: 25-44 and <25, 45-64 and <25, 65+ and <25 have significant different suicide death rate. Age groups that are >25 all have higher suicide death rate compared to age <25. And age 65+ have smaller suicide death rate compared to 25-44, 45-64 groups.    
+3. __Year__: All pairwise comparison for years don't generate significant result, meaning there is not significant different suicide death rate in different years.
+
+ 
 
 
 
