@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "Analysis by age group"
 author: "Jianyou Liu"
 date: "November 30, 2018"
 output: github_document
@@ -7,7 +7,7 @@ output: github_document
 
 ```{r setup, include=FALSE}
 library(tidyverse)
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 
 knitr::opts_chunk$set(
   fig.width = 6,
@@ -20,16 +20,21 @@ theme_set(theme_bw() + theme(legend.position = "bottom"))
 
 ```
 
-## Age Group VS. Depression Rate
-### brfss dataset
+#### Depression prevalence and Suicide death rate by **Age** in isolation to time(year) Analysis
+##### Age intervals: "<25", "25-44","45-64", and "65+"
 
-#### Load data
+To investigate the relationship between depression rate and suicide death rate under age groups, we took the following steps:
+
+*   For depression rate, we used the 'brfss' dataset and filtered out the responses that represent 'yes' for experiencing depression. Then, we computed the total sample size of the amount of people who answered the question on the survey and combined the age groups into one of the 4 categories mentioned above. Next, we grouped by the final age groups and obtained summation of the total number of partipants who reported depression over each age category along with the total number of responses and conducted a proportion test to get the estimated proportion of depression among each age group as well as their confidence intervals. Finally, we generated a plot to visually represent the results,
+
+* For suicide death rate, we used the 'injury' dataset and did similar data processing procedures and exploratory analysis as we did for the 'brfss' dataset. The suicide death rate is computed by dividing the total number of deaths from suicide attempts by the total population.
+
 ```{r read_data, message = FALSE}
 brfss_data = read_csv("./data/brfss_data.csv") %>% 
   janitor::clean_names()
 View(brfss_data)
 ```
-#### Modify data
+
 ```{r modify_data}
 new_brfss_data = brfss_data %>% 
   filter(break_out_category_id == "CAT3") %>% 
@@ -46,7 +51,7 @@ age_data = new_brfss_data %>%
   summarize(total_dep = sum(depress_num, na.rm = TRUE), total_num = sum(tot_sample_size, na.rm = TRUE))
   
 ```
-#### Estimate depression proportion for each age group
+
 ```{r prop_test}
 # Run prop.test for each age group
 test_data = age_data %>% 
@@ -54,15 +59,16 @@ test_data = age_data %>%
   unnest() %>% 
   select(age_group, total_dep, total_num, estimate, conf.low, conf.high)
 ```
-#### Create plot to show estimated depression rate and CIs for age group
+
 ```{r plot}
 test_data %>% 
   mutate(age_group = fct_reorder(age_group, estimate)) %>% 
   ggplot(aes(x = age_group, y = estimate, color = age_group)) +
   geom_bar(stat = "identity", position = position_dodge(), width = .6) +
-  geom_errorbar(aes(ymin = conf.low , ymax = conf.high), width = .2) +
+  geom_errorbar(aes(ymin = conf.low , ymax = conf.high), width = .2) + 
+  theme(plot.title = element_text(hjust = .5)) +
   labs(
-    title = "Estimates of Proportion of Depression and CIs for each Age Category",
+    title = "Estimates of Proportion of Depression and CIs \n for each Age Category",
     x = "Age Group",
     y = "Estimated Depression Rate"
   ) +
@@ -73,16 +79,11 @@ test_data %>%
   
 ```
 
-**Comment**: According to the graph, the estimated depression rate is the highest among people aged between 45-64 and the lowest for those above 65.
-
-
-### Injury Data
-#### Load dataset
 ```{r import_data, message = FALSE}
 injury_data = read_csv("./data/NCHS_-_Injury_Mortality__United_States.csv") %>% 
   janitor::clean_names()
 ```
-#### Clean and manipulate data
+
 ```{r tidy_data}
 new_injury_data = injury_data %>% 
   select(year, age_group_years, injury_intent, deaths, population) %>% 
@@ -95,7 +96,7 @@ new_injury_data = injury_data %>%
   summarize(tot_suicide_deaths = sum(deaths), tot_pop = sum(population))
   
 ```
-#### Obtain estimated suicide death rate and CIs
+
 ```{r prop_test2}
 test_data2 = new_injury_data %>% 
   mutate(test_stats = map2(.x = tot_suicide_deaths, .y = tot_pop, ~ prop.test(x = .x, n = .y, conf.level = .95) %>% broom::tidy())) %>% 
@@ -104,9 +105,9 @@ test_data2 = new_injury_data %>%
   mutate(estimate = estimate*100000, conf.low = conf.low*100000, conf.high = conf.high*100000)
 
 ```
-#### Create plot to show estimated suicide death rate for each age group
+
 ```{r plot2}
-test_data2 %>% 
+ test_data2 %>% 
   mutate(age_group_years = fct_reorder(age_group_years, estimate)) %>% 
   ggplot(aes(x = age_group_years, y = estimate, color = age_group_years)) +
   geom_bar(stat = "identity", position = position_dodge(), width = .6) +
@@ -124,4 +125,6 @@ test_data2 %>%
 
 ```
 
-**Comment**: It appears that people aged between 45 and 64 have both the higest depression rate and also the highest suicide death rate compared with the other age groups.
+According to the graphs, both the estimated depression prevalence and suicide death rates are the highest among people aged between 45-64, which is also consistent with our results taking the effect of time(years) into account. This suugests the possibility of a existing positive correlation between depression rate and suicide death rate for people ages from 45 to 64. To justify this finding, we conducted further statistical analysis by constructing linear regression models with age groups as predictors for depression prevalence and suicide death rate.
+
+
