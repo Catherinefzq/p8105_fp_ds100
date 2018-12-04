@@ -76,22 +76,22 @@ library(tidyverse)
 
 ``` r
 # load the preliminary dataset
-brfss_data_zf = read.csv("./data/brfss_data.csv") 
+brfss_data = read.csv("./data/brfss_data.csv") 
 # method 1 - select the columns we need
-brfss_tidy = brfss_data_zf %>% 
+brfss_tidy = brfss_data %>% 
   select(year, locationabbr, locationdesc, response, sample_size, data_value, Age.Group, Gender, Race.Ethnicity, geo_location) 
 # method 2 - create age dataset
-brfss_age = brfss_data_zf %>% 
+brfss_age = brfss_data %>% 
   select(year, locationabbr, locationdesc, response, sample_size, data_value, Age.Group) %>% 
   filter(!is.na(Age.Group)) %>% 
   janitor::clean_names()
 # create race dataset
-brfss_race = brfss_data_zf %>% 
+brfss_race = brfss_data %>% 
   select(year, locationabbr, locationdesc, response, sample_size, data_value, Gender) %>% 
   filter(!is.na(Gender)) %>% 
   janitor::clean_names()
 # create gender dataset
-brfss_gender = brfss_data_zf %>% 
+brfss_gender = brfss_data %>% 
   select(year, locationabbr, locationdesc, response, sample_size, data_value, Race.Ethnicity) %>% 
   filter(!is.na(Race.Ethnicity)) %>% 
   janitor::clean_names()
