@@ -101,16 +101,33 @@ brfss_data = brfss_raw %>%
    filter(year %in% c(2011, 2012, 2013, 2014, 2015, 2016),
           break_out_category %in% c("Age Group", "Race/Ethnicity", "Gender")) %>% 
    spread(key = break_out_category, break_out)
-
-brfss_tidy = brfss_data %>% 
-  select(year, locationabbr, locationdesc, response, sample_size, `Age Group`, Gender, `Race/Ethnicity`, geo_location)
 ```
 
-The original dataset contains 1,386,855 rows and 27 column. For further use, we make a preliminary dataset. The preliminary dataset contains 8931 rows and 14 columns. The complete data dictionary is linked above.
+The original dataset contains 1,386,855 rows and 27 column. For further use, we make a preliminary dataset. The preliminary dataset contains 8931 rows and 14 columns. We save the preliminary dataset in our data file. The complete data dictionary is linked above.
 
 ## Further cleaning
 ```{r}
-
+# load the preliminary dataset
+brfss_data = read.csv("./data/brfss_data.csv") 
+# method 1 - select the columns we need
+brfss_tidy = brfss_data %>% 
+  select(year, locationabbr, locationdesc, response, sample_size, data_value, Age.Group, Gender, Race.Ethnicity, geo_location) 
+# method 2 - create age dataset
+brfss_age = brfss_data %>% 
+  select(year, locationabbr, locationdesc, response, sample_size, data_value, Age.Group) %>% 
+  filter(!is.na(Age.Group)) %>% 
+  janitor::clean_names()
+# create race dataset
+brfss_race = brfss_data %>% 
+  select(year, locationabbr, locationdesc, response, sample_size, data_value, Gender) %>% 
+  filter(!is.na(Gender)) %>% 
+  janitor::clean_names()
+# create gender dataset
+brfss_gender = brfss_data %>% 
+  select(year, locationabbr, locationdesc, response, sample_size, data_value, Race.Ethnicity) %>% 
+  filter(!is.na(Race.Ethnicity)) %>% 
+  janitor::clean_names()
 ```
 
+As we will do our followin analysis by age, race, and gender, we created three tidy subsets by age, race, and gender. 
 
