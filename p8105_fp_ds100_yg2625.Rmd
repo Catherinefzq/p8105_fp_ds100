@@ -2,7 +2,9 @@
 title: "p8105_fp_ds100_yg2625"
 author: "Yue Gu"
 date: "11/30/2018"
-output: github_document
+output: 
+  pdf_document:
+    latex_engine: xelatex
 ---
 
 ```{r setup, include=FALSE}
@@ -151,10 +153,10 @@ To maintain comparability between injury mechanism and depression(brfss) data, w
 
 ### Suicide Model
 Using injury data, we first calculate suicide death rate by
-    
-$$\frac{Deaths}{Population} * 100000$$ 
-    
-which represents the number of deaths caused by suicide per 100,000 units population. Then, we transform sex, race, age, year into factor variables for future regression model building. 
+      
+$$  \frac{Deaths}{Population} * 100000
+$$
+    which represents the number of deaths caused by suicide per 100,000 units population. Then, we transform sex, race, age, year into factor variables for future regression model building. 
 
 Then, we construct regression for suicide death rate as response, sex, race, age(in years), year as predictor. By observing the coefficients estimates and p-values, there is several interesting finds for suicide death rates:    
 1. sex has **significant** p-value < 0.0001: there is significant difference of suicide rate between male and female group and female tends to have lower suicide death rate.   
