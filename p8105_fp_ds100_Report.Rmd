@@ -13,6 +13,7 @@ Suicide is a leading cause of death in the US. Suicide rates increased in nearly
 # Related work:
 Anything that inspired you, such as a paper, a web site, or something we discussed in class.
 
+Suicide has ranked as the 10th leading cause of death among Americans for many years. https://www.verywellmind.com/suicide-rates-overstated-in-people-with-depression-2330503
 
 # Initial questions:
 
@@ -50,14 +51,14 @@ The original dataset contains 1,386,855 rows and 27 column. For further use, we 
 ```{r}
  injury_data = read_csv("./data/NCHS_-_Injury_Mortality__United_States.csv") %>% 
   janitor::clean_names() %>%   # tidy the variable names
-  dplyr::select(year, sex, race,age_group_years, injury_intent, deaths, population) %>%  # selecting variables we are interested in
-  distinct(year, sex,race,age_group_years, injury_intent, .keep_all = TRUE) %>% 
-  filter(injury_intent == "Suicide", year %in% c(2011, 2012, 2013, 2014, 2015, 2016)) %>% 
+  #distinct(year, sex,race,age_group_years, injury_intent, .keep_all = TRUE) %>% 
+  filter(injury_intent == "Suicide", year %in% c(2011, 2012, 2013, 2014, 2015, 2016),
+          sex != 'Both sexes',age_group_years != 'All Ages',race != 'All races',injury_mechanism == 'All Mechanisms') %>% 
   arrange(year) # filtering out data for suicide 
                 # filtering only data from 2011-2016 for further comparison analysis with another dataset.
  
 ```
-The original dataset contains 98280 rows and 17 columns.  For further use, we make a preliminary dataset. The preliminary dataset contains 504 rows and 7 columns. Each row includes the information of the mortality rate for specific age/sex/gender group who attempted suicide during specific year. 
+The original dataset contains 98280 rows and 17 columns.  For further use, we make a preliminary dataset. The preliminary dataset contains 504 rows and 7 columns. Each row includes the information of the mortality rate for specific age,sex,gender group who attempted suicide during specific year. 
 
 ## Further cleaning
 
