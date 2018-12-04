@@ -29,6 +29,16 @@ Methodology: http://www.cdc.gov/brfss/factsheets/pdf/DBS_BRFSS_survey.pdf
 
 Glossary: http://apps.nccd.cdc.gov/BRFSSQuest/index.asp
 
+## NCHS Injury Mortality Data (1999 to 2016)
+
+Data from NCHS Injury Mortality Data (1999 to 2016) were accessed from cdc.gov.(https://data.cdc.gov/NCHS/NCHS-Injury-Mortality-United-States/nt65-c7a7).The version of the data that we will use in this analysis can be found in our Github (./data).
+
+NCHS Injury Mortality Data contain information for injury mechanism, injury intents, race, gender, sex and mortality rates.
+Data are based on information from all resident death certificates filed in the 50 states and the District of Columbia.
+
+
+
+
 ### Data acquisition and description
 
 As the original dataset is too large, we download the dataset and acquire the data we need. The specific data to be used in this project was accessed in December 2018 using the code below. 
