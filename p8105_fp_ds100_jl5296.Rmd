@@ -124,6 +124,7 @@ test_data2 = new_injury_data %>%
   )
 
 ```
-According to the graphs, both the estimated depression prevalence and suicide death rates are the highest among people aged between 45-64, which is also consistent with our results taking the effect of time(years) into account. This suugests the possibility of a existing positive correlation between dpression rate and suicide death rate for people ages from 45 to 64. To justify this finding, we conducted further statistical analysis by constructing linear regression models with age groups as predictors.
+
+According to the graphs, both the estimated depression prevalence and suicide death rates are the highest among people aged between 45-64, which is also consistent with our results taking the effect of time(years) into account. This suugests the possibility of a existing positive correlation between depression rate and suicide death rate for people ages from 45 to 64. To justify this finding, we conducted further statistical analysis by constructing linear regression models with age groups as predictors for depression prevalence and suicide death rate.
 
 
