@@ -432,6 +432,30 @@ Because of the data structure of brfss data, the age, gender, race are independe
 
 ### Additional Analysis for Location:
 
+```{r}
+brfss<-read.csv("./data/brfss_data.csv")
+
+location_depression<-brfss %>% 
+  dplyr::select(year,locationabbr,locationdesc,response,sample_size,data_value,confidence_limit_low,confidence_limit_high,break_out_category_id,breakout_id,Gender) %>%
+  filter(break_out_category_id=="CAT2",response=="Yes") %>% 
+mutate(total_sample_size=ceiling(sample_size/(data_value/100))) %>% 
+  rename(depress_num=sample_size,depress_rate= data_value) %>% 
+  group_by(locationabbr) %>% 
+  summarize(total_dep=sum(depress_num,na.rm=T),total_sam=sum(total_sample_size,na.rm=T))
+
+location_depression=location_depression %>% 
+  mutate(depression_rate=total_dep/total_sam)
+
+location_depression %>% 
+  ggplot(aes(x=locationabbr,y=depression_rate,color=locationabbr))+
+  labs(title="Drepression Rate in Different States")+
+  geom_col()+
+  theme(axis.text.x = element_text(angle = 45,size = 6.5),legend.position = "none")
+
+
+```
+
+
 **Location Model**:   
 
 #### Location

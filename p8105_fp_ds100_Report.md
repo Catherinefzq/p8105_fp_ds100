@@ -385,6 +385,8 @@ Because of the data structure of brfss data, the age, gender, race are independe
 
 ### Additional Analysis for Location:
 
+![](p8105_fp_ds100_Report_files/figure-markdown_github/unnamed-chunk-7-1.png)
+
 **Location Model**:
 
 #### Location
