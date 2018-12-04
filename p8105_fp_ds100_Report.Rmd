@@ -47,6 +47,18 @@ brfss_data = brfss_raw %>%
 
 The original dataset contains 1,386,855 rows and 27 column. For further use, we make a preliminary dataset. The preliminary dataset contains 8931 rows and 14 columns. The complete data dictionary is linked above.
 
+```{r}
+ injury_data = read_csv("./data/NCHS_-_Injury_Mortality__United_States.csv") %>% 
+  janitor::clean_names() %>%   # tidy the variable names
+  dplyr::select(year, sex, race,age_group_years, injury_intent, deaths, population) %>%  # selecting variables we are interested in
+  distinct(year, sex,race,age_group_years, injury_intent, .keep_all = TRUE) %>% 
+  filter(injury_intent == "Suicide", year %in% c(2011, 2012, 2013, 2014, 2015, 2016)) %>% 
+  arrange(year) # filtering out data for suicide 
+                # filtering only data from 2011-2016 for further comparison analysis with another dataset.
+ 
+```
+The original dataset contains 98280 rows and 17 columns.  For further use, we make a preliminary dataset. The preliminary dataset contains 504 rows and 7 columns. Each row includes the information of the mortality rate for specific age/sex/gender group who attempted suicide during specific year. 
+
 ## Further cleaning
 
 
