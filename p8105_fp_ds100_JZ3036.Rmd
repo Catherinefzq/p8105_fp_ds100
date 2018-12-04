@@ -43,20 +43,19 @@ data_BRFSS_JZ %>%
 ```
 
 ```{r BRFSS_year_age}
-data_BRFSS_JZ %>% 
+data_BRFSS_JZ %>%
+  mutate(., age_group = str_replace(age_group, '25-34', '25-44'),
+            age_group = str_replace(age_group, '35-44', '25-44'),
+            age_group = str_replace(age_group, '45-54', '45-64'),
+            age_group = str_replace(age_group, '55-64', '45-64')) %>% 
   filter(., age_group != 'NA') %>% 
   group_by(., year, response, age_group) %>% 
   summarize(., sum_sample_size = sum(sample_size)) %>% 
-  spread(., key = age_group, value = sum_sample_size) %>% 
-  mutate(., '25-44' = (`25-34` + `35-44`),
-            '45-64' = (`45-54` + `55-64`)) %>% 
-  select(., -'25-34', - '35-44', -'45-54', -'55-64') %>% 
-  gather(., key = age, value = sample_size, '18-24':'45-64') %>% 
-  spread(., key = response, value = sample_size) %>% 
+  spread(., key = response, value = sum_sample_size) %>% 
   mutate(., prevalence = (Yes / (Yes + No)),
     ci_low = prevalence - qnorm(.975) * sqrt(prevalence * (1 - prevalence) / (Yes + No)),
     ci_high = prevalence + qnorm(.975) * sqrt(prevalence * (1 - prevalence) / (Yes + No))) %>% 
-  ggplot(., aes(x = year, y = prevalence, color = age)) +
+  ggplot(., aes(x = year, y = prevalence, color = age_group)) +
   geom_point() +
   geom_line() +
   geom_errorbar(aes(ymax = ci_high, ymin = ci_low), width = 0.1, alpha = 0.5) + 
@@ -85,25 +84,21 @@ data_BRFSS_JZ %>%
 
 ```{r BRFSS_year_race}
 data_BRFSS_JZ %>% 
+  mutate(., race_ethnicity = str_replace(race_ethnicity, 'American Indian or Alaskan Native, non-Hispanic', 'Other'),
+            race_ethnicity = str_replace(race_ethnicity, 'Asian, non-Hispanic', 'Other'),
+            race_ethnicity = str_replace(race_ethnicity, 'Multiracial, non-Hispanic', 'Other'),
+            race_ethnicity = str_replace(race_ethnicity, 'Native Hawaiian or other Pacific Islander, non-Hispanic', 'Other'),
+            race_ethnicity = str_replace(race_ethnicity, 'Other, non-Hispanic', 'Other')) %>%  
   filter(., race_ethnicity != 'NA') %>% 
   group_by(., year, response, race_ethnicity) %>% 
   summarize(., sum_sample_size = sum(sample_size)) %>% 
-  spread(., key = race_ethnicity, value = sum_sample_size) %>%
-  mutate(., Other = sum(c(`American Indian or Alaskan Native, non-Hispanic`, 
-                         `Asian, non-Hispanic`, `Multiracial, non-Hispanic`,
-                  `Native Hawaiian or other Pacific Islander, non-Hispanic`,
-                                                     `Other, non-Hispanic`), na.rm = TRUE)) %>%   select(., -'American Indian or Alaskan Native, non-Hispanic',
-            - 'Asian, non-Hispanic', -'Multiracial, non-Hispanic',
-            -'Native Hawaiian or other Pacific Islander, non-Hispanic',
-            -'Other, non-Hispanic') %>%
-  gather(., key = race, value = sample_size, 'Black, non-Hispanic':'Other') %>% 
-  spread(., key = response, value = sample_size) %>% 
+  spread(., key = response, value = sum_sample_size) %>% 
   mutate(., prevalence = (Yes / (Yes + No)),
     ci_low = prevalence - qnorm(.975) * sqrt(prevalence * (1 - prevalence) / (Yes + No)),
     ci_high = prevalence + qnorm(.975) * sqrt(prevalence * (1 - prevalence) / (Yes + No))) %>%
-  mutate(., race = forcats::fct_relevel(race,
+  mutate(., race_ethnicity = forcats::fct_relevel(race_ethnicity,
                      c('Hispanic', 'Black, non-Hispanic', 'White, non-Hispanic', 'Other'))) %>%
-  ggplot(., aes(x = year, y = prevalence, color = race)) +
+  ggplot(., aes(x = year, y = prevalence, color = race_ethnicity)) +
   geom_point() +
   geom_line() +
   geom_errorbar(aes(ymax = ci_high, ymin = ci_low), width = 0.1, alpha = 0.8) + 
@@ -112,7 +107,6 @@ data_BRFSS_JZ %>%
   ggtitle('Depression Prevalence from 2011-2016 by Race')
   
 ```
-
 
 IM data:
 ```{r tidy_data_IM}
@@ -124,30 +118,21 @@ data_IM_JZ = data_IM %>%
     age_group_years != 'All Ages',
     race != 'All races',
     injury_mechanism == 'All Mechanisms')
-
-data_IM_JZ %>% 
-  select(., injury_mechanism) %>% 
-  distinct(.)
 ```
 
 ```{r IM_year_age}
 data_IM_JZ %>% 
+  mutate(., age_group_years = str_replace(age_group_years, '< 15', '< 25'),
+            age_group_years = str_replace(age_group_years, '15–24', '< 25'),
+            age_group_years = str_replace(age_group_years, '65–74', '64+'),
+            age_group_years = str_replace(age_group_years, '75+', '64')) %>% 
   group_by(., year, age_group_years) %>% 
-  summarize(., sum_deaths = sum(deaths), population = sum(population)) %>% 
-  spread(., key = age_group_years, value = sum_deaths) %>%
-  mutate_all(funs(ifelse(is.na(.), 0, .))) %>%
-  mutate(., '< 25' = (`< 15` + `15–24`),
-            '> 64' = (`65–74` + `75+`)) %>% 
-  select(., -'< 15', - '15–24', -'65–74', -'75+') %>%
-  gather(., key = age, value = deaths, '25–44':'> 64') %>%
-  filter(., deaths != 0) %>% 
-  group_by(., year, age) %>% 
   summarize(., deaths = sum(deaths), population = sum(population)) %>% 
   mutate(., death_rate = (deaths / population),
     ci_low = death_rate - qnorm(.975) * sqrt(death_rate * (1 - death_rate) / population),
     ci_high = death_rate + qnorm(.975) * sqrt(death_rate * (1 - death_rate) / population)) %>%
-  mutate(., age = forcats::fct_relevel(age, c('< 25', '25–44', '45–64', '> 64'))) %>% 
-  ggplot(., aes(x = year, y = death_rate, color = age)) +
+  mutate(., age = forcats::fct_relevel(age_group_years, c('< 25', '25–44', '45–64', '64+'))) %>% 
+  ggplot(., aes(x = year, y = death_rate, color = age_group_years)) +
   geom_point() +
   geom_line() +
   geom_errorbar(aes(ymax = ci_high, ymin = ci_low), width = 0.1, alpha = 0.8) + 
@@ -199,13 +184,7 @@ data_IM_JZ %>%
     ci_high = death_rate + qnorm(.975) * sqrt(death_rate * (1 - death_rate) / population)) %>%
   plot_ly(y = ~death_rate, x = ~year, color = ~race, type = 'scatter', mode = 'line+marker',
           error_y = ~list(array = c(ci_high - death_rate)))
-  
-  ggplot(., aes(x = year, y = death_rate, color = race)) +
-  geom_point() +
-  geom_line() +
-  geom_errorbar(aes(ymax = ci_high, ymin = ci_low), width = 0.5, alpha = 0.5) + 
-  theme(legend.position = 'right', legend.text = element_text(size=6), legend.box = 'vertical',
-        legend.key.size = unit(1, 'cm')) +
-  ggtitle('Suicide Death Rate from 2011-2016 by Age')
 ```
+
+
 

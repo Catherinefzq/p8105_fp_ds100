@@ -39,14 +39,14 @@ new_injury =
          age_group_years = str_replace(age_group_years,"75+", "65")) %>% 
   select(year, sex, age_group_years, race, suicide_dr) %>% 
   mutate(sex = as.factor(ifelse(sex == "Male", 0, 1)),
-         race = as.factor(ifelse(race == "Non-Hispanic white", "white", "non-white")),
+         race = as.factor(race),
          age_group_years = as.factor(age_group_years),
          year = as.factor(year))
   
 ```
 #### Construct a regression model using 'suicide death rate' as the outcome of interest with 'sex', 'age group' and 'race' being its predictors
 ```{r lm}
-fit_suicide = lm(suicide_dr ~ sex + race + age_group_years + year, data = new_injury)
+fit_suicide = lm(suicide_dr ~ sex + race + age_group_years, data = new_injury)
 summary(fit_suicide)
 
 pairwise.t.test(new_injury$suicide_dr, new_injury$age_group_years, p.adj = 'bonferroni')
@@ -106,10 +106,9 @@ new_brfss_race =
   brfss_data %>% 
   filter(year %in% c(2011, 2012, 2013, 2014, 2015, 2016),
          response == "Yes",
-         race_ethnicity != "") %>%
-  mutate(total_sp = sample_size/(data_value/100)) %>% 
+         race_ethnicity == "Black, non-Hispanic" | race_ethnicity == "White, non-Hispanic" | race_ethnicity == "Hispanic") %>%
   select(locationabbr, data_value, race_ethnicity) %>% 
-  mutate(race_ethnicity = as.factor(ifelse(race_ethnicity == "White, non-Hispanic", "white", "nonwhite")))
+  mutate(race_ethnicity = as.factor(race_ethnicity))
 
 
 fit_race = lm(data_value ~ locationabbr + race_ethnicity, data = new_brfss_race)
