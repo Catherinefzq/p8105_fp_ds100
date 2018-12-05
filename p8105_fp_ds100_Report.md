@@ -8,23 +8,23 @@ Motivation
 
 Suicide is a leading cause of death in the US. Suicide rates increased in nearly every state from 1999 through 2016. Mental health conditions are often seen as the cause of suicide, but suicide is rarely caused by any single factor. In fact, many people who died by suicide are not known to have a diagnosed mental health condition at the time of death. We are interested in examining the variations of suicide death rates among different categorical variables such as gender, race, age group, and to test if the observed differences are statistically significant based on the analysis of suicide death rates and related confidence intervals.
 
-Related work:
-=============
+Related work
+============
 
-Suicide has ranked as the 10th leading cause of death among Americans for many years. Here is the link for report that inspired us. <https://afsp.org/about-suicide/suicide-statistics/> This report summarizes the suicide rates by race and age. In addition, they also include the most common suicide methods and data for suicide attempts.
+Suicide has ranked as the 10th leading cause of death among Americans for many years. Here is the link for a report that inspired us. <https://afsp.org/about-suicide/suicide-statistics/> This report summarizes the suicide rates by race and age. In addition, they also include the most common suicide methods and data for suicide attempts.
 
-Initial questions:
-==================
+Initial questions
+=================
 
-The initial thought of this project is to discover the relationship between suicide and people's mental status. We have found two separated datasets,one of them is the Injury Mortality data in the U.S., the other contains people's depression status in the US. Since both datasets include information for age, race, and gender, we decided to compare the trend of suicide death rates with depression prevalence under these three categories.
+The initial thought of this project is to discover the relationship between suicide and people's mental status. We have found two separated datasets, one of them is the Injury Mortality data in the U.S., the other contains people's depression status in the US. Since both datasets include information for age, race, and gender, we decided to compare the trend of suicide death rates with depression prevalence under these three categories.
 
-Data:
-=====
+Data
+====
 
 BRFSS Prevalence Data (2011 to present)
 ---------------------------------------
 
-Data from the Behavioral Risk Factor Surveillance System (BRFSS) Prevalence Data (2011 to present) were accessed from cdc.gov.(<https://chronicdata.cdc.gov/Behavioral-Risk-Factors/Behavioral-Risk-Factor-Surveillance-System-BRFSS-P/dttw-5yxu>) The version of the data that we will use in this analysis can be found in our Github (./data).
+Data from the Behavioral Risk Factor Surveillance System (BRFSS) Prevalence Data (2011 to present) were accessed from cdc.gov.(<https://chronicdata.cdc.gov/Behavioral-Risk-Factors/Behavioral-Risk-Factor-Surveillance-System-BRFSS-P/dttw-5yxu>) The version of the data that we will use in this analysis can be found in our Github.
 
 Methodology: <http://www.cdc.gov/brfss/factsheets/pdf/DBS_BRFSS_survey.pdf>
 
@@ -90,24 +90,24 @@ injury_tidy = injury_data %>%
                 # filtering only data from 2011-2016 for further comparison analysis with another dataset.
 ```
 
-The original dataset contains 98280 rows and 17 columns. For further use, we make a preliminary dataset. The preliminary dataset contains 216 rows and 7 columns. Each row includes the information of the mortality rate for specific age,sex,gender group who attempted suicide during specific year.
+The original dataset contains 98280 rows and 17 columns. For further use, we make a preliminary dataset. The preliminary dataset contains 216 rows and 7 columns. Each row includes the information of the mortality rate for a specific age, sex, gender group who attempted suicide during a specific year.
 
 Exploratory analysis:
 =====================
 
-Creat a new data from the original data just for this section, so that it won't affect other part of the analysis: For BRFSS dataset, select some variables (year, locationabbr, locationdesc, response, sample\_size, age\_group, gender, race\_ethnicity) that might be usful for later analysis.
+Create a new data from the original data just for this section, so that it won't affect other parts of the analysis: For BRFSS dataset, select some variables (year, locationabbr, locationdesc, response, sample\_size, age\_group, gender, race\_ethnicity) that might be useful for later analysis.
 
-For the Injury Mortality dataset, we filter out 'Suicide' as our focus and get rid of summarized rows for age, sex and race. Since the cases and total population do not differ by 'injury\_mechanism', here we use 'All Mechanisms' to prevend over counting for the population.
+For the Injury Mortality dataset, we filter out 'Suicide' as our focus and get rid of summarized rows for age, sex, and race. Since the cases and total population do not differ by 'injury\_mechanism', here we use 'All Mechanisms' to prevent over counting for the population.
 
 Exploring by 'Age'
 ------------------
 
 ![](p8105_fp_ds100_Report_files/figure-markdown_github/BRFSS_IM_year_age-1.png)
 
-First thing we did is to combine ages to make the two dataset compariable. One defect of this analysis is that the BRFSS data only includes 18-24 age group compared to '&lt; 25' age group in the mortality dataset. If we just look at the other three age groups, for people from 25-64, high prevalence of depression seems to be consistent with suicide death rate. However, regardless of age group '65+' having a relative low depression prevalence, their suicide rate remains relatively high.
+The first thing we did is to combine ages to make the two dataset comparable. One defect of this analysis is that the BRFSS data only includes 18-24 age group compared to '&lt; 25' age group in the mortality dataset. If we just look at the other three age groups, for people from 25-64, a high prevalence of depression seems to be consistent with the death rate. However, regardless of the age group '65+' having a relative low depression prevalence, their suicide rate remains relatively high.
 When using the 'str\_replace' function for '75+', the result kept giving me an extra '+' at the end of the string. So I set '65+' for the '45–64' group so that they can combine to become the '65+' group.
-For both Prevalence and Death Rate, 5% CI were calculated. Usually large CI stands for a relatively small sample size.
-Another thing worth noticing is that in the raw dataset, the '–' in between '45–64' is not the usual '-' in the keyboard,thus I had to copy and paste the symbol to my code.
+For both Prevalence and Death Rate, 5% CI were calculated. Usually, large CI stands for a relatively small sample size.
+Another thing worth noticing is that in the raw dataset, the '–' in between '45–64' is not the usual '-' in the keyboard, thus I had to copy and paste the symbol to my code.
 
 Exploring by 'Race':
 --------------------
@@ -121,7 +121,7 @@ Exploring by 'Gender'
 
 ![](p8105_fp_ds100_Report_files/figure-markdown_github/BRFSS_IM_year_gender-1.png)
 
-Although female have higher depression prevalence, their suicide rate is much lower than that of male. Could this give a hint that women are more endurable to depression? We do some researches and find out that women are more likely than men to report suicidal ideation and attempts and to be hospitalized for suicide attempts whereas male tend to choose more lethal method to commit suicide than female (Vijayakumar,2015).
+Although female have higher depression prevalence, their suicide rate is much lower than that of the male. Could this give a hint that women are more endurable to depression? We do some researches and find out that women are more likely than men to report suicidal ideation and attempts and to be hospitalized for suicide attempts whereas male tends to choose more lethal methods to commit suicide than female (Vijayakumar,2015).
 
 Regression Model Analysis
 -------------------------
@@ -173,11 +173,11 @@ Then, we construct regression for suicide death rate as response, sex, race, age
 
 **Suicide Death Rate = 7.84 - 12.565 I{sex = female} - 0.912 I{race = Non-Hispanic black} + 10.313 I{race = Non-Hispanic white} + 7.745 I{25 &lt; age &lt; 44} + 7.531 I{45 &lt; age &lt; 64} + 6.362 I{age &gt;= 65} + 0.212 I{year = 2012} + 0.215 I{year = 2013} + 0.707 I{year = 2014} + 0.778 I{year = 2015} + 1.05 I{year = 2016}**
 
-1.  Sex has **significant** p-value &lt; 0.0001: There is significant difference of suicide rate between male and female group and female tends to have lower suicide death rate.
-2.  Race of Non-Hispanic white has **significant** p-value: There is significant difference of suicide rate between Non-hispanic Whites and Hispanic and Non-hispanic Black have non-significant difference with Hispanic. Whites tend to have higher suicide death rate compared to Hispanic and Blacks.
-3.  All groups of age(in years) have **significant** p-value: There is significant difference between all age groups with baseline age group(age &lt; 25).
-4.  All years have **non-significant** p-value: There is not significant difference between all years with year 2011.
-5.  The model produced an adjusted *R*<sup>2</sup> = 0.6405, which represents there are 64% of the variability of the suicide rate are explained by the fitted model and data after adjusted and it's a acceptable proportion for the model.
+1.  Sex has **significant** p-value &lt; 0.0001: There is a significant difference in suicide rate between the male and female group and female tends to have lower suicide death rate.
+2.  Race of Non-Hispanic white has **significant** p-value: There is a significant difference of suicide rate between Non-Hispanic Whites and Hispanic and Non-Hispanic Black has a non-significant difference with Hispanic. Whites tend to have higher suicide death rate compared to Hispanic and Blacks.
+3.  All groups of age(in years) have **significant** p-value: There is a significant difference between all age groups with baseline age group(age &lt; 25).
+4.  All years have **non-significant** p-value: There is not a significant difference between all years with year 2011.
+5.  The model produced an adjusted *R*<sup>2</sup> = 0.6405, which represents there are 64% of the variability of the suicide rate are explained by the fitted model and data after adjusted and it's an acceptable proportion for the model.
 
 #### Pairwise comparison
 
@@ -227,10 +227,10 @@ Then, we construct regression for suicide death rate as response, sex, race, age
     ## 2016-2014 0.343424632 -4.045606 4.732455 0.9999199
     ## 2016-2015 0.271713841 -4.117317 4.660744 0.9999749
 
-Then, we make pairwise comparison with Bonferroni and Tukey for race, age and year groups. Findings:
-1. **Race**: Non-Hispanic White and Hispanic, Non-Hispanic White and Black have significant different suicide death rate. White have the highest suicide death rate among 3 race groups. And Blacks have lower suicide death rate compared to Hispanic and Whites.
+Then, we make a pairwise comparison with Bonferroni and Tukey for race, age and year groups. Findings:
+1. **Race**: Non-Hispanic White and Hispanic, Non-Hispanic White and Black have significant different suicide death rate. The white has the highest suicide death rate among 3 race groups. And Blacks have lower suicide death rate compared to Hispanic and Whites.
 2. **Age**: 25-44 and &lt;25, 45-64 and &lt;25, 65+ and &lt;25 have significant different suicide death rate. Age groups that are &gt;25 all have higher suicide death rate compared to age &lt;25. And age 65+ have lower suicide death rate compared to 25-44, 45-64 groups.
-3. **Year**: All pairwise comparison for years don't generate significant result, meaning there is no significant different suicide death rate in different years.
+3. **Year**: All pairwise comparison for years don't generate a significant result, meaning there is no significant different suicide death rate in different years.
 
 ### Depression model
 
@@ -326,24 +326,24 @@ Because of the data structure of brfss data, the age, gender, race are independe
 **Race Model**:
 **Depression Rate = 17.511 - 1.716 I{race = Black, non-Hispanic} + 1.901 I{race = White, non-Hispanic}**
 
-1.  There is significant difference in the depression propotion among Hispantic and Non-Hispanic Black, Hispantic and Non-Hispanic White.
+1.  There is a significant difference in the depression proportion among Hispanic and Non-Hispanic Black, Hispanic and Non-Hispanic White.
 2.  All pairwise comparison showed a significant p-value between each race groups while Whites have higher depression proportion than Hispanics and Blacks and Blacks have lower depression proportion than Hispanics.
-3.  The adjusted *R*<sup>2</sup> = 0.1081 indicates that 10.81% of variability of the depression proportion is explained by the model only includes race groups as predictor.
+3.  The adjusted *R*<sup>2</sup> = 0.1081 indicates that 10.81% of the variability of the depression proportion is explained by the model only includes race groups as the predictor.
 
 ### Additional Analysis for Location
 
-![](p8105_fp_ds100_Report_files/figure-markdown_github/unnamed-chunk-6-1.png)
+![](p8105_fp_ds100_Report_files/figure-markdown_github/location%20analysis-1.png)
 
-In addition to investigating the trend of depression prevalence under the category of *"Age"*, *"Race"*, and *"Gender"*, we are also interested in examining if there is a difference in depression proportion across states of the U.S. Based on the graph, a remarkable finding is that Virgin Islands has the lowest proportion of depression compared to other locations and the difference is quite significant. According to our research, the state ethinicity group consists of over 70% Black race(<https://en.wikipedia.org/wiki/United_States_Virgin_Islands>), and linking back to our visualizations and regression model results, they are consistent with each other since Blacks tend to have the lowest depression prevalence relative the others race groups included in our analysis.
+In addition to investigating the trend of depression prevalence under the category of *"Age"*, *"Race"*, and *"Gender"*, we are also interested in examining if there is a difference in depression proportion across states of the U.S. Based on the graph, a remarkable finding is that the Virgin Islands has the lowest proportion of depression compared to other locations and the difference is quite significant. According to our research, the state ethnicity group consists of over 70% Black race(<https://en.wikipedia.org/wiki/United_States_Virgin_Islands>), and linking back to our visualizations and regression model results, they are consistent with each other since Blacks tend to have the lowest depression prevalence relative the others race groups included in our analysis.
 
 Discussion
 ==========
 
-From 2011 through 2016, the general trend for depression prevalence in US increases from 2011 to 2013, then decreases there after. While on the other hand, suicide death rate appears to be increasing each year. Even if we know that depression is just one causal factor for suicide, we expected to see similar trend for the three groups (age, race, gender).
+From 2011 through 2016, the general trend for depression prevalence in the US increases from 2011 to 2013, then decreases thereafter. While on the other hand, the suicide death rate appears to be increasing each year. Even if we know that depression is just one causal factor for suicide, we expected to see a similar trend for the three groups (age, race, gender).
 
-People older than 65 have relatively low prevalence of depression but high suicide rate. On the contray,Black people have both low depression prevalence and low suicide rate. White people have high depression prevalence and high suicide rate . Women are reported to have higher prevalence of depression compared to men, while keep a relatively low death rate of suicide rate. Any apparent difference of trend on the two plot might suggest other causal factors in the 'causal pies'.
+People older than 65 have a relatively low prevalence of depression but a high suicide rate. On the contrary, Black people have both low depression prevalence and low suicide rate. White people have high depression prevalence and high suicide rate. Compared to men, women are reported to have a higher prevalence of depression while keeping a relatively low death rate of the suicide rate. Any apparent difference of trend on the two plot might suggest other causal factors in the 'causal pies'.
 
-Our results obtained from the regression models agree mostly with the patterns found in the visualization plots by looking at the estimated coefficients for each model parameter and comparing their magnitude and signs with the reference factor level. However, by looking at the fitted regression for suicide death rate, it can be observed that the term 'year' is not a significant predictor and thus should be removed from the model. This means that although suicide death rates appears to be gradually increasing from 2011 to 2016, there is not enough statistical evidence to show that the change is significant. Overall, we recommend the final model to be **Suicide Death Rate ~ Age + Race + Gender**
+Our results obtained from the regression models agree mostly with the patterns found in the visualization plots by looking at the estimated coefficients for each model parameter and comparing their magnitude and signs with the reference factor level. However, by looking at the fitted regression for suicide death rate, it can be observed that the term 'year' is not a significant predictor and thus should be removed from the model. This means that although suicide death rates appear to be gradually increasing from 2011 to 2016, there is not enough statistical evidence to show that the change is significant. Overall, we recommend the final model to be **Suicide Death Rate ~ Age + Race + Gender**
 
 | term                     |     estimate|     p.value|
 |:-------------------------|------------:|-----------:|
@@ -357,7 +357,7 @@ Our results obtained from the regression models agree mostly with the patterns f
 
 **Suicide Death Rate = 8.334 - 12.565 I{sex = female} - 0.912 I{race = Non-Hispanic black} + 10.313 I{race = Non-Hispanic white} + 7.475 I{25 &lt; age &lt; 44} + 7.531 I{45 &lt; age &lt; 64} + 6.362 I{age &gt;= 65}**
 
-On the other hand, for the simple linear regressions to predict depression prevalence, *"Age"*, *"Race"*, and *"Gender"* are all significant covariates. This supports our initial hypothesis that suicide death rate and depression prevalence do vary among these proposed factors. However, the direct association between depression and suicide may be difficult to test. For rare cases like suicide, case-control study should be a suitable way to conduct the research by carefully selecting the cases and controls and examining their odds ratio of being exposed to depression. The challenge is that psychological status such as depression is hardly detected accurately, and people may not be willing to report authentic information which potentially leads to bias when analyzing the results. Generally speaking, our project was successful in exploring the relationship between suicide death rate and depresion prevalence among *"Age"*, *"Race"*, and *"Gender"*.
+On the other hand, for the simple linear regressions to predict depression prevalence, *"Age"*, *"Race"*, and *"Gender"* are all significant covariates. This supports our initial hypothesis that suicide death rate and depression prevalence do vary among these proposed factors. However, the direct association between depression and suicide may be difficult to test. For rare cases like suicide, a case-control study should be a suitable way to conduct the research by carefully selecting the cases and controls and examining their odds ratio of being exposed to depression. The challenge is that psychological status such as depression is hardly detected accurately, and people may not be willing to report authentic information which potentially leads to bias when analyzing the results. Generally speaking, our project was successful in exploring the relationship between suicide death rate and depression prevalence among *"Age"*, *"Race"*, and *"Gender"*.
 
 Reference
 =========
