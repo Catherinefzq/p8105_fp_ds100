@@ -313,7 +313,8 @@ summary(fit_suicide) %>%
   mutate(term = str_replace(term, "^sex", "sex: "),
          term = str_replace(term, "^race", "race: "),
          term = str_replace(term, "^age_group_years", "age group years: "),
-         term = str_replace(term, "^year", "year: ")) %>% 
+         term = str_replace(term, "^year", "year: "),
+         p.value = ifelse(p.value < 0.001, '< 0.001', round(p.value, digits = 3))) %>% 
   knitr::kable(digits = 3)
 ```
 

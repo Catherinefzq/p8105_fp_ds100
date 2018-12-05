@@ -150,20 +150,20 @@ To maintain comparability between injury mechanism and depression(brfss) data, w
 
 ### Suicide rate model
 
-| term                     |  estimate|  p.value|
-|:-------------------------|---------:|--------:|
-| (Intercept)              |     7.840|    0.000|
-| sex: 1                   |   -12.565|    0.000|
-| race: Non-Hispanic black |    -0.912|    0.399|
-| race: Non-Hispanic white |    10.313|    0.000|
-| age group years: 25–44   |     7.475|    0.000|
-| age group years: 45–64   |     7.531|    0.000|
-| age group years: 65+     |     6.362|    0.000|
-| year: 2012               |     0.212|    0.890|
-| year: 2013               |     0.215|    0.888|
-| year: 2014               |     0.707|    0.644|
-| year: 2015               |     0.778|    0.611|
-| year: 2016               |     1.050|    0.492|
+| term                     |  estimate| p.value    |
+|:-------------------------|---------:|:-----------|
+| (Intercept)              |     7.840| &lt; 0.001 |
+| sex: 1                   |   -12.565| &lt; 0.001 |
+| race: Non-Hispanic black |    -0.912| 0.399      |
+| race: Non-Hispanic white |    10.313| &lt; 0.001 |
+| age group years: 25–44   |     7.475| &lt; 0.001 |
+| age group years: 45–64   |     7.531| &lt; 0.001 |
+| age group years: 65+     |     6.362| &lt; 0.001 |
+| year: 2012               |     0.212| 0.89       |
+| year: 2013               |     0.215| 0.888      |
+| year: 2014               |     0.707| 0.644      |
+| year: 2015               |     0.778| 0.611      |
+| year: 2016               |     1.050| 0.492      |
 
 ### Suicide Model Analysis
 
