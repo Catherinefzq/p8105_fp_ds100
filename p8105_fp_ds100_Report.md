@@ -56,25 +56,19 @@ The original dataset contains 1,386,855 rows and 27 columns. For further use, we
 
 ``` r
 # load the preliminary dataset
-brfss_data = read.csv("./data/brfss_data.csv") 
-# method 1 - select the columns we need
-brfss_tidy = brfss_data %>% 
-  select(year, locationabbr, locationdesc, response, sample_size, data_value, Age.Group, Gender, Race.Ethnicity, geo_location) 
-# method 2 - create age dataset
+brfss_data = read.csv("./data/brfss_data.csv") %>% janitor::clean_names()
+# create age dataset
 brfss_age = brfss_data %>% 
-  select(year, locationabbr, locationdesc, response, sample_size, data_value, Age.Group) %>% 
-  filter(!is.na(Age.Group)) %>% 
-  janitor::clean_names()
+  select(year, locationabbr, locationdesc, response, sample_size, data_value, age_group) %>% 
+  filter(!is.na(age_group)) 
 # create race dataset
 brfss_race = brfss_data %>% 
-  select(year, locationabbr, locationdesc, response, sample_size, data_value, Gender) %>% 
-  filter(!is.na(Gender)) %>% 
-  janitor::clean_names()
+  select(year, locationabbr, locationdesc, response, sample_size, data_value, gender) %>% 
+  filter(!is.na(gender)) 
 # create gender dataset
 brfss_gender = brfss_data %>% 
-  select(year, locationabbr, locationdesc, response, sample_size, data_value, Race.Ethnicity) %>% 
-  filter(!is.na(Race.Ethnicity)) %>% 
-  janitor::clean_names()
+  select(year, locationabbr, locationdesc, response, sample_size, data_value, race_ethnicity) %>% 
+  filter(!is.na(race_ethnicity)) 
 ```
 
 As we will do our following analysis by age, race, and gender, we created three tidy subsets by age, race, and gender.
@@ -87,9 +81,9 @@ Data from the NCHS - Injury Mortality: United States were accessed from data.cdc
 ### Data Cleaning
 
 ``` r
- injury_data = read_csv("./data/NCHS_-_Injury_Mortality__United_States.csv") %>% 
-  janitor::clean_names() %>%   # tidy the variable names
-  #distinct(year, sex,race,age_group_years, injury_intent, .keep_all = TRUE) %>% 
+injury_data = read_csv("./data/NCHS_-_Injury_Mortality__United_States.csv") %>% 
+  janitor::clean_names()    # tidy the variable names
+injury_tidy = injury_data %>% 
   filter(injury_intent == "Suicide", year %in% c(2011, 2012, 2013, 2014, 2015, 2016),
           sex != 'Both sexes',age_group_years != 'All Ages',race != 'All races',injury_mechanism == 'All Mechanisms') %>% 
   arrange(year) # filtering out data for suicide 
@@ -338,7 +332,7 @@ Because of the data structure of brfss data, the age, gender, race are independe
 
 ### Additional Analysis for Location
 
-![](p8105_fp_ds100_Report_files/figure-markdown_github/unnamed-chunk-9-1.png)
+![](p8105_fp_ds100_Report_files/figure-markdown_github/unnamed-chunk-6-1.png)
 
 In addition to investigating the trend of depression prevalence under the category of *"Age"*, *"Race"*, and *"Gender"*, we are also interested in examining if there is a difference in depression proportion across states of the U.S. Based on the graph, a remarkable finding is that Virgin Islands has the lowest proportion of depression compared to other locations and the difference is quite significant. According to our research, the state ethinicity group consists of over 70% Black race(<https://en.wikipedia.org/wiki/United_States_Virgin_Islands>), and linking back to our visualizations and regression model results, they are consistent with each other since Blacks tend to have the lowest depression prevalence relative the others race groups included in our analysis.
 
