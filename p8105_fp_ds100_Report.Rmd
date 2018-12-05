@@ -507,7 +507,10 @@ On the other hand, for the simple linear regressions to predict depression preva
 
 #Reference
 [1] Holmes, L. (2018). Has the Rate of Suicide in the U.S. Risen? Retrieved from https://www.verywellmind.com/suicide-rates-overstated-in-people-with-depression-2330503 
-[2] Vijayakumar L. (2015). Suicide in women. Indian journal of psychiatry, 57(Suppl 2), S233-8. 
+
+[2] Vijayakumar L. (2015). Suicide in women. Indian journal of psychiatry, 57(Suppl 2), S233-8.
+
 [3] Centers for disease control and prevention. (2018). Behavioral Risk Factor Surveillance System (BRFSS) Prevalence Data (2011 to present) | Chronic Disease and Health Promotion Data & Indicators. Retrieved from https://chronicdata.cdc.gov/Behavioral-Risk-Factors/Behavioral-Risk-Factor-Surveillance-System-BRFSS-P/dttw-5yxu 
+
 [4] National Center for Health Statistics. (2018). NCHS - Injury Mortality: United States | Data. Retrieved from https://data.cdc.gov/NCHS/NCHS-Injury-Mortality-United-States/nt65-c7a7
 
