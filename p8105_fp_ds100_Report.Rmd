@@ -17,8 +17,9 @@ Suicide is a leading cause of death in the US. Suicide rates increased in nearly
 
 
 # Related work:
-
-Suicide has ranked as the 10th leading cause of death among Americans for many years. https://www.verywellmind.com/suicide-rates-overstated-in-people-with-depression-2330503
+Suicide has ranked as the 10th leading cause of death among Americans for many years. 
+Here is the link for report that inspired us. https://afsp.org/about-suicide/suicide-statistics/ 
+This report summarizes the suicide rates by race and age. In addition, they also include the most common suicide methods and data for suicide attempts.
 
 # Initial questions:
 
@@ -38,7 +39,7 @@ Glossary: http://apps.nccd.cdc.gov/BRFSSQuest/index.asp
 
 Since the original dataset is too large, we download the dataset and acquire the data we need. The specific data to be used in this project was accessed in December 2018 using the code below. 
 
-```{r eval=FALSE, echo=TRUE}
+```{r brfss acquisition, eval = FALSE, echo = TRUE}
 library(tidyverse)
 
 data_BRFSS = 
@@ -58,27 +59,21 @@ The original dataset contains 1,386,855 rows and 27 columns. For further use, we
 
 ### Further cleaning
 
-```{r eval=TRUE, echo=TRUE, message=FALSE}
+```{r import brfss, eval = TRUE, echo = TRUE, message = FALSE}
 # load the preliminary dataset
-brfss_data = read.csv("./data/brfss_data.csv") 
-# method 1 - select the columns we need
-brfss_tidy = brfss_data %>% 
-  select(year, locationabbr, locationdesc, response, sample_size, data_value, Age.Group, Gender, Race.Ethnicity, geo_location) 
-# method 2 - create age dataset
+brfss_data = read.csv("./data/brfss_data.csv") %>% janitor::clean_names()
+# create age dataset
 brfss_age = brfss_data %>% 
-  select(year, locationabbr, locationdesc, response, sample_size, data_value, Age.Group) %>% 
-  filter(!is.na(Age.Group)) %>% 
-  janitor::clean_names()
+  select(year, locationabbr, locationdesc, response, sample_size, data_value, age_group) %>% 
+  filter(!is.na(age_group)) 
 # create race dataset
 brfss_race = brfss_data %>% 
-  select(year, locationabbr, locationdesc, response, sample_size, data_value, Gender) %>% 
-  filter(!is.na(Gender)) %>% 
-  janitor::clean_names()
+  select(year, locationabbr, locationdesc, response, sample_size, data_value, gender) %>% 
+  filter(!is.na(gender)) 
 # create gender dataset
 brfss_gender = brfss_data %>% 
-  select(year, locationabbr, locationdesc, response, sample_size, data_value, Race.Ethnicity) %>% 
-  filter(!is.na(Race.Ethnicity)) %>% 
-  janitor::clean_names()
+  select(year, locationabbr, locationdesc, response, sample_size, data_value, race_ethnicity) %>% 
+  filter(!is.na(race_ethnicity)) 
 ```
 
 As we will do our following analysis by age, race, and gender, we created three tidy subsets by age, race, and gender. 
@@ -89,28 +84,31 @@ Data from the NCHS - Injury Mortality: United States were accessed from data.cdc
 
 ### Data Cleaning
 
-```{r eval=TRUE, echo=TRUE, message=FALSE}
- injury_data = read_csv("./data/NCHS_-_Injury_Mortality__United_States.csv") %>% 
-  janitor::clean_names() %>%   # tidy the variable names
-  #distinct(year, sex,race,age_group_years, injury_intent, .keep_all = TRUE) %>% 
+```{r injury data cleaning, eval = TRUE, echo = TRUE, message = FALSE}
+injury_data = read_csv("./data/NCHS_-_Injury_Mortality__United_States.csv") %>% 
+  janitor::clean_names()    # tidy the variable names
+injury_tidy = injury_data %>% 
   filter(injury_intent == "Suicide", year %in% c(2011, 2012, 2013, 2014, 2015, 2016),
           sex != 'Both sexes',age_group_years != 'All Ages',race != 'All races',injury_mechanism == 'All Mechanisms') %>% 
   arrange(year) # filtering out data for suicide 
                 # filtering only data from 2011-2016 for further comparison analysis with another dataset.
- 
 ```
+
 The original dataset contains 98280 rows and 17 columns.  For further use, we make a preliminary dataset. The preliminary dataset contains 216 rows and 7 columns. Each row includes the information of the mortality rate for specific age,sex,gender group who attempted suicide during specific year. 
 
 # Exploratory analysis:
 
-Creat a new data from the original data just for this section, so that it won't affect other part of the analysis:
+Creat a new data from the original data just for this section, so that it won't affect other part of the analysis: 
 For BRFSS dataset, select some variables (year, locationabbr, locationdesc, response, sample_size, age_group, gender, race_ethnicity) that might be usful for later analysis.
+
 ```{r tidy_data_BRFSS}
 data_BRFSS_JZ = brfss_data %>% 
   janitor::clean_names(.) %>% 
   select(., year, locationabbr, locationdesc, response, sample_size, age_group, gender, race_ethnicity)
 ```
+
 For the Injury Mortality dataset, we filter out 'Suicide' as our focus and get rid of summarized rows for age, sex and race. Since the cases and total population do not differ by 'injury_mechanism', here we use 'All Mechanisms' to prevend over counting for the population. 
+
 ```{r tidy_data_IM}
 data_IM_JZ = injury_data %>% 
   janitor::clean_names(.) %>% 
@@ -125,6 +123,7 @@ data_IM_JZ = injury_data %>%
 ## Exploring by 'Age'
 
 ```{r BRFSS_IM_year_age}
+# plot brfss age
 BRFSS_age_plot = 
 data_BRFSS_JZ %>%
   mutate(., age_group = str_replace(age_group, '25-34', '25-44'),
@@ -144,7 +143,7 @@ data_BRFSS_JZ %>%
   geom_errorbar(aes(ymax = ci_high, ymin = ci_low), width = 0.3, alpha = 0.5) + 
   theme(legend.position = 'bottom', legend.text = element_text(size=6), legend.box = 'vertical', legend.key.size = unit(0.5, 'cm')) +
   ggtitle('Depression Prevalence by Age')
-
+# plot injury age
 IM_age_plot = 
 data_IM_JZ %>% 
   mutate(., age_group_years = str_replace(age_group_years, '< 15', '< 25'),
@@ -164,7 +163,7 @@ data_IM_JZ %>%
   geom_errorbar(aes(ymax = ci_high, ymin = ci_low), width = 0.3, alpha = 0.8) + 
   theme(legend.position = 'bottom', legend.text = element_text(size=6), legend.box = 'vertical', legend.key.size = unit(0.5, 'cm')) +
   ggtitle('Suicide Death Rate by Age')
-
+# combine two plots
 BRFSS_age_plot + IM_age_plot
 ```
 
@@ -176,6 +175,7 @@ Another thing worth noticing is that in the raw dataset, the '–' in between '4
 ## Exploring by 'Race':
 
 ```{r BRFSS_IM_year_race}
+# plot brfss race
 BRFSS_race_plot =
 data_BRFSS_JZ %>% 
   mutate(., race_ethnicity = str_replace(race_ethnicity, 'American Indian or Alaskan Native, non-Hispanic', 'Other'),
@@ -198,7 +198,7 @@ data_BRFSS_JZ %>%
   geom_errorbar(aes(ymax = ci_high, ymin = ci_low), width = 0.1, alpha = 0.8) + 
   theme(legend.position = 'bottom', legend.text = element_text(size=5), legend.box = 'vertical', legend.key.size = unit(0.4, 'cm')) +
   ggtitle('Depression Prevalence by Race')
-
+# plot injury race
 IM_race_plot =
 data_IM_JZ %>% 
   group_by(., year, race) %>%
@@ -212,7 +212,7 @@ data_IM_JZ %>%
   geom_errorbar(aes(ymax = ci_high, ymin = ci_low), width = 0.5, alpha = 0.5) + 
   theme(legend.position = 'bottom', legend.text = element_text(size=5), legend.box = 'vertical', legend.key.size = unit(0.4, 'cm')) +
   ggtitle('Suicide Death Rate by Race')
-
+# combine two plots
 BRFSS_race_plot + IM_race_plot
 ```
 
@@ -221,6 +221,7 @@ Race categories other than White, Black, and Hispanic were combined into 'Other'
 ## Exploring by 'Gender'
 
 ```{r BRFSS_IM_year_gender}
+# plot brfss gender
 BRFSS_gender_plot = 
 data_BRFSS_JZ %>% 
   filter(., gender != 'NA') %>% 
@@ -236,7 +237,7 @@ data_BRFSS_JZ %>%
   geom_errorbar(aes(ymax = ci_high, ymin = ci_low), width = 0.5, alpha = 1) +
   theme(legend.position = 'bottom', legend.text = element_text(size=6), legend.box = 'vertical', legend.key.size = unit(1, 'cm')) +
   ggtitle('Depression Prevalence by Genders')
-
+# plot injury gender
 IM_gender_plot = 
 data_IM_JZ %>% 
   group_by(., year, sex) %>% 
@@ -250,7 +251,7 @@ data_IM_JZ %>%
   geom_errorbar(aes(ymax = ci_high, ymin = ci_low), width = 0.5, alpha = 0.8) + 
   theme(legend.position = 'bottom', legend.text = element_text(size=6), legend.box = 'vertical', legend.key.size = unit(1, 'cm')) +
   ggtitle('Suicide Death Rate by Genders')
-
+# combine two plots
 BRFSS_gender_plot + IM_gender_plot
 ```
 
@@ -279,17 +280,6 @@ To maintain comparability between injury mechanism and depression(brfss) data, w
     + 2014
     + 2015
     + 2016
-
-
-```{r read_data, message = FALSE}
-brfss_data = read_csv("./data/brfss_data.csv") %>% 
-  janitor::clean_names()
-
-injury_data = read_csv("./data/NCHS_-_Injury_Mortality__United_States.csv") %>% 
-  janitor::clean_names()
-
-```
-
 
 ```{r convert_var}
 new_injury = 
@@ -327,8 +317,6 @@ summary(fit_suicide) %>%
   knitr::kable(digits = 3)
 ```
 
-
-
 ### Suicide Model Analysis
 Using injury data, we first calculate __suicide death rate = (Deaths \ Population) * 100000__ which represents the number of deaths caused by suicide per 100,000 units population. Then, we transform sex, race, age, year into factor variables for future regression model building. 
 
@@ -351,7 +339,6 @@ Then, we make pairwise comparison with Bonferroni and Tukey for race, age and ye
 1.  __Race__: Non-Hispanic White and Hispanic, Non-Hispanic White and Black have significant different suicide death rate. White have the highest suicide death rate among 3 race groups. And Blacks have lower suicide death rate compared to Hispanic and Whites.  
 2.  __Age__: 25-44 and <25, 45-64 and <25, 65+ and <25 have significant different suicide death rate. Age groups that are >25 all have higher suicide death rate compared to age <25. And age 65+ have lower suicide death rate compared to 25-44, 45-64 groups.    
 3. __Year__: All pairwise comparison for years don't generate significant result, meaning there is no significant different suicide death rate in different years.
-
 
 ### Depression model
 #### Age model
@@ -521,7 +508,7 @@ __Suicide Death Rate = 8.334 - 12.565 I{sex = female} - 0.912 I{race = Non-Hispa
 On the other hand, for the simple linear regressions to predict depression prevalence, *"Age"*, *"Race"*, and *"Gender"* are all significant covariates. This supports our initial hypothesis that suicide death rate and depression prevalence do vary among these proposed factors. However, the direct association between depression and suicide may be difficult to test. For rare cases like suicide, case-control study should be a suitable way to conduct the research by carefully selecting the cases and controls and examining their odds ratio of being exposed to depression. The challenge is that psychological status such as depression is hardly detected accurately, and people may not be willing to report authentic information which potentially leads to bias when analyzing the results. Generally speaking, our project was successful in exploring the relationship between suicide death rate and depresion prevalence among *"Age"*, *"Race"*, and *"Gender"*.
 
 #Reference
-[1] Holmes, L. (2018). Has the Rate of Suicide in the U.S. Risen? Retrieved from https://www.verywellmind.com/suicide-rates-overstated-in-people-with-depression-2330503 
+[1] American Foundation for Suicide Prevention (2018). Suicide Statistics Retrieved from https://afsp.org/about-suicide/suicide-statistics/
 
 [2] Vijayakumar L. (2015). Suicide in women. Indian journal of psychiatry, 57(Suppl 2), S233-8.
 
