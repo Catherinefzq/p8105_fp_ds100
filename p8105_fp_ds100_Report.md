@@ -324,11 +324,9 @@ Because of the data structure of brfss data, the age, gender, race are independe
 
 ### Additional Analysis for Location:
 
-<<<<<<< HEAD
-![](p8105_fp_ds100_Report_files/figure-markdown_github/unnamed-chunk-7-1.png) In addition to investigating the trend of depression prevalence under the category of *"Age"*, *"Race"*, and *"Gender"*, we are also interested in examining if there is a difference in depression proportion across states of the U.S. Based on the graph, a remarkable finding is that Virgin Islands has the lowest proportion of depression compared to other locations and the difference is quite significant. According to our research, the state population consists of over 70% Black race, and linking back to our visualizations and regression model results, they are consistent with each other since Blacks tend to have the lowest depression prevalence relative the others race groups included in our analysis.
-=======
 ![](p8105_fp_ds100_Report_files/figure-markdown_github/unnamed-chunk-9-1.png)
->>>>>>> 74585d1c142284f6ea3d2ca1d7226578ff3c9209
+
+In addition to investigating the trend of depression prevalence under the category of *"Age"*, *"Race"*, and *"Gender"*, we are also interested in examining if there is a difference in depression proportion across states of the U.S. Based on the graph, a remarkable finding is that Virgin Islands has the lowest proportion of depression compared to other locations and the difference is quite significant. According to our research, the state population consists of over 70% Black race, and linking back to our visualizations and regression model results, they are consistent with each other since Blacks tend to have the lowest depression prevalence relative the others race groups included in our analysis.
 
 Discussion:
 ===========
