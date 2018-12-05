@@ -242,12 +242,12 @@ Then, we make pairwise comparison with Bonferroni and Tukey for race, age and ye
 
 #### Age model
 
-| term              |  estimate|  p.value|
-|:------------------|---------:|--------:|
-| (Intercept)       |    16.486|        0|
-| age\_group: 25-44 |     2.310|        0|
-| age\_group: 45-64 |     4.528|        0|
-| age\_group: 65+   |    -2.125|        0|
+| term             |   estimate|     p.value|
+|:-----------------|----------:|-----------:|
+| (Intercept)      |  16.485710|  &lt; 0.001|
+| age group: 25-44 |   2.310023|  &lt; 0.001|
+| age group: 45-64 |   4.528117|  &lt; 0.001|
+| age group: 65+   |  -2.125364|  &lt; 0.001|
 
 ##### Pairwise comparison
 
@@ -280,10 +280,10 @@ Because of the data structure of brfss data, the age, gender, race are independe
 
 #### Gender model
 
-| term        |  estimate|  p.value|
-|:------------|---------:|--------:|
-| (Intercept) |    13.660|        0|
-| gender: 1   |     9.028|        0|
+| term        |   estimate|     p.value|
+|:------------|----------:|-----------:|
+| (Intercept) |  13.660439|  &lt; 0.001|
+| gender: 1   |   9.028339|  &lt; 0.001|
 
     ##   Tukey multiple comparisons of means
     ##     95% family-wise confidence level
@@ -306,11 +306,11 @@ Because of the data structure of brfss data, the age, gender, race are independe
 
     ## Warning: Outer names are only allowed for unnamed scalar atomic inputs
 
-| term                      |  estimate|  p.value|
-|:--------------------------|---------:|--------:|
-| (Intercept)               |    17.511|        0|
-| race: Black, non-Hispanic |    -1.716|        0|
-| race: White, non-Hispanic |     1.901|        0|
+| term                      |   estimate|     p.value|
+|:--------------------------|----------:|-----------:|
+| (Intercept)               |  17.511454|  &lt; 0.001|
+| race: Black, non-Hispanic |  -1.715593|  &lt; 0.001|
+| race: White, non-Hispanic |   1.900893|  &lt; 0.001|
 
     ##   Tukey multiple comparisons of means
     ##     95% family-wise confidence level
@@ -351,15 +351,15 @@ People older than 65 have relatively low prevalence of depression but high suici
 
 Our results obtained from the regression models agree mostly with the patterns found in the visualization plots by looking at the estimated coefficients for each model parameter and comparing their magnitude and signs with the reference factor level. However, by looking at the fitted regression for suicide death rate, it can be observed that the term 'year' is not a significant predictor and thus should be removed from the model. This means that although suicide death rates appears to be gradually increasing from 2011 to 2016, there is not enough statistical evidence to show that the change is significant. Overall, we recommend the final model to be **Suicide Death Rate ~ Age + Race + Gender**
 
-| term                     |  estimate|  p.value|
-|:-------------------------|---------:|--------:|
-| (Intercept)              |     8.334|    0.000|
-| sex: 1                   |   -12.565|    0.000|
-| race: Non-Hispanic black |    -0.912|    0.394|
-| race: Non-Hispanic white |    10.313|    0.000|
-| age group years: 25–44   |     7.475|    0.000|
-| age group years: 45–64   |     7.531|    0.000|
-| age group years: 65+     |     6.362|    0.000|
+| term                     |     estimate|     p.value|
+|:-------------------------|------------:|-----------:|
+| (Intercept)              |    8.3336988|  &lt; 0.001|
+| sex: 1                   |  -12.5645905|  &lt; 0.001|
+| race: Non-Hispanic black |   -0.9120358|       0.394|
+| race: Non-Hispanic white |   10.3133176|  &lt; 0.001|
+| age group: 25–44         |    7.4750257|  &lt; 0.001|
+| age group: 45–64         |    7.5307751|  &lt; 0.001|
+| age group: 65+           |    6.3624865|  &lt; 0.001|
 
 **Suicide Death Rate = 8.334 - 12.565 I{sex = female} - 0.912 I{race = Non-Hispanic black} + 10.313 I{race = Non-Hispanic white} + 7.475 I{25 &lt; age &lt; 44} + 7.531 I{45 &lt; age &lt; 64} + 6.362 I{age &gt;= 65}**
 

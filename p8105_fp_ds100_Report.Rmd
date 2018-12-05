@@ -370,13 +370,13 @@ new_brfss_age =
   select(data_value, age_group) %>% 
   mutate(age_group = as.factor(age_group))
 
-
 fit_age = lm(data_value ~ age_group, data = new_brfss_age)
 summary(fit_age) %>% 
   broom::tidy() %>% 
   select(term, estimate, p.value) %>%
-  mutate(term = str_replace(term, "age_group", "age_group: "))%>% 
-  knitr::kable(digits = 3)
+  mutate(term = str_replace(term, "age_group", "age group: "),
+         p.value = ifelse(p.value < 0.001, '< 0.001', round(p.value, digits = 3)))%>% 
+  knitr::kable(align = c("l", "r", "r"))
 ```
 
 ##### Pairwise comparison  
@@ -411,14 +411,13 @@ new_brfss_gender =
   select(data_value, gender) %>% 
   mutate(gender = as.factor(ifelse(gender == "Male", 0, 1)))
 
-
 fit_gender = lm(data_value ~ gender, data = new_brfss_gender)
 summary(fit_gender) %>% 
   broom::tidy() %>% 
   select(term, estimate, p.value) %>%
-  mutate(term = str_replace(term, "^gender", "gender: "))%>% 
-  knitr::kable(digits = 3)
-
+  mutate(term = str_replace(term, "^gender", "gender: "),
+         p.value = ifelse(p.value < 0.001, '< 0.001', round(p.value, digits = 3)))%>% 
+  knitr::kable(align = c("l", "r", "r"))
 
 fit_gender %>% aov(.) %>% TukeyHSD()
 ```
@@ -445,13 +444,13 @@ new_brfss_race =
   mutate(race_ethnicity = as.factor(race_ethnicity),
          race_ethnicity = fct_relevel(race_ethnicity, race_ethnicity = c("Hispanic", "Black, non-Hispanic", "White, non-Hispanic")))
 
-
 fit_race = lm(data_value ~ race_ethnicity, data = new_brfss_race)
 summary(fit_race) %>% 
   broom::tidy() %>% 
   select(term, estimate, p.value) %>%
-  mutate(term = str_replace(term, "^race_ethnicity", "race: "))%>% 
-  knitr::kable(digits = 3)
+  mutate(term = str_replace(term, "^race_ethnicity", "race: "),
+         p.value = ifelse(p.value < 0.001, '< 0.001', round(p.value, digits = 3)))%>% 
+  knitr::kable(align = c("l", "r", "r"))
 
 fit_race %>% aov(.) %>% TukeyHSD()
 
@@ -504,15 +503,16 @@ People older than 65 have relatively low prevalence of depression but high suici
 Our results obtained from the regression models agree mostly with the patterns found in the visualization plots by looking at the estimated coefficients for each model parameter and comparing their magnitude and signs with the reference factor level. However, by looking at the fitted regression for suicide death rate, it can be observed that the term 'year' is not a significant predictor and thus should be removed from the model. This means that although suicide death rates appears to be gradually increasing from 2011 to 2016, there is not enough statistical evidence to show that the change is significant. Overall, we recommend the final model to be **Suicide Death Rate ~ Age + Race + Gender**
 
 ```{r}
+
 fit_suicide_final = lm(suicide_dr ~ sex + race + age_group_years, data = new_injury)
 summary(fit_suicide_final) %>%
   broom::tidy() %>% 
   select(term, estimate, p.value) %>%
   mutate(term = str_replace(term, "^sex", "sex: "),
          term = str_replace(term, "^race", "race: "),
-         term = str_replace(term, "^age_group_years", "age group years: ")) %>% 
-  knitr::kable(digits = 3)
-
+         term = str_replace(term, "^age_group_years", "age group: "),
+         p.value = ifelse(p.value < 0.001, '< 0.001', round(p.value, digits = 3))) %>% 
+  knitr::kable(align = c("l", "r", "r"))
   
 ```
 
