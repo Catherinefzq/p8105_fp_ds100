@@ -80,7 +80,7 @@ brfss_gender = brfss_data %>%
   janitor::clean_names()
 ```
 
-As we will do our followin analysis by age, race, and gender, we created three tidy subsets by age, race, and gender. 
+As we will do our following analysis by age, race, and gender, we created three tidy subsets by age, race, and gender. 
 
 ```{r eval=TRUE, echo=TRUE, message=FALSE}
  injury_data = read_csv("./data/NCHS_-_Injury_Mortality__United_States.csv") %>% 
@@ -454,10 +454,15 @@ location_depression %>%
 
 
 ```
-
+In addition to investigating the trend of depression prevalence under the category of *"Age"*, *"Race"*, and *"Gender"*, we are also interested in examining if there is a difference in depression proportion across states of the U.S. Based on the graph, a remarkable finding is that Virgin Islands has the lowest proportion of depression compared to other locations and the difference is quite significant. According to our research, the state population consists of over 70% Black race, and linking back to our visualizations and regression model results, they are consistent with each other since Blacks tend to have the lowest depression prevalence relative the others race groups included in our analysis.
 
 
 # Discussion:
 
-From 2011 through 2016, the general depression prevalence in US goes up then goes down again. On the other hand, the suicide rate has been increasing each year. Even we know that depression is just one causal factor to suicide, we expected seeing similar trend for the three groups (age, race, gender). The result are generally as expected while there are some noticable ones. \
-People older than 65 have a relatively low prevalence of depression while still keep a high suicide rate. In contrary to Black people who have both low depression prevalence and suicide rate, White people are high in both of the statistics. Women are reported to have higher prevalence of depression compared to men, while keep a relatively low death rate of suicide rate. Any apparent difference of trend on the two plot might suggest other causal factors in the 'causal pies'. However, the association between depression and suicide is kind of hard to test. For rare cases like suicide, case-control study should be a suitable way to conduct the research, while the psychological status like depression are really complicated to detect, especially for suicide cases. \
+From 2011 through 2016, the general trend for depression prevalence in US increases from 2011 to 2013, then decreases there after. While on the other hand, suicide death rate appears to be increasing each year. Even if we know that depression is just one causal factor for suicide, we expected to see similar trend for the three groups (age, race, gender). The result are generally as expected with some noticable ones. 
+
+People older than 65 have a relatively low prevalence of depression while still keep a high suicide rate. In contrary to Black people who have both low depression prevalence and suicide rate, White people are high in both of the statistics. Women are reported to have higher prevalence of depression compared to men, while keep a relatively low death rate of suicide rate. Any apparent difference of trend on the two plot might suggest other causal factors in the 'causal pies'. 
+
+Our results obtained from the regression models agree mostly with the patterns found in the visualization plots stratified by *"Age"*, *"Race"*, and *"Gender"* by looking at the estimated coefficients for each model parameter and comparing their magnitude and signs with the reference factor level. However, by looking at the fitted regression for suicide death rate, it can be observed that the term 'year' is not a significant predictor and thus should be removed from the model. This means that although suicide death rates appears to be gradually increasing from 2011 to 2016, there is not enough statistical evidence to show that the change is significant.
+
+On the other hand, for the simple linear regressions to predict depression prevalence, *"Age"*, *"Race"*, and *"Gender"* are all significant covariates. This supports our conclusion that suicide death rate and depression prevalence do vary among these proposed factors. However, the direct association between depression and suicide may be difficult to test. For rare cases like suicide, case-control study should be a suitable way to conduct the research, while the psychological status like depression are really complicated to detect, especially for suicide cases.
