@@ -351,6 +351,18 @@ People older than 65 have relatively low prevalence of depression but high suici
 
 Our results obtained from the regression models agree mostly with the patterns found in the visualization plots by looking at the estimated coefficients for each model parameter and comparing their magnitude and signs with the reference factor level. However, by looking at the fitted regression for suicide death rate, it can be observed that the term 'year' is not a significant predictor and thus should be removed from the model. This means that although suicide death rates appears to be gradually increasing from 2011 to 2016, there is not enough statistical evidence to show that the change is significant. Overall, we recommend the final model to be **Suicide Death Rate ~ Age + Race + Gender**
 
+| term                     |  estimate|  p.value|
+|:-------------------------|---------:|--------:|
+| (Intercept)              |     8.334|    0.000|
+| sex: 1                   |   -12.565|    0.000|
+| race: Non-Hispanic black |    -0.912|    0.394|
+| race: Non-Hispanic white |    10.313|    0.000|
+| age group years: 25–44   |     7.475|    0.000|
+| age group years: 45–64   |     7.531|    0.000|
+| age group years: 65+     |     6.362|    0.000|
+
+**Suicide Death Rate = 8.334 - 12.565 I{sex = female} - 0.912 I{race = Non-Hispanic black} + 10.313 I{race = Non-Hispanic white} + 7.475 I{25 &lt; age &lt; 44} + 7.531 I{45 &lt; age &lt; 64} + 6.362 I{age &gt;= 65}**
+
 On the other hand, for the simple linear regressions to predict depression prevalence, *"Age"*, *"Race"*, and *"Gender"* are all significant covariates. This supports our initial hypothesis that suicide death rate and depression prevalence do vary among these proposed factors. However, the direct association between depression and suicide may be difficult to test. For rare cases like suicide, case-control study should be a suitable way to conduct the research by carefully selecting the cases and controls and examining their odds ratio of being exposed to depression. The challenge is that psychological status such as depression is hardly detected accurately, and people may not be willing to report authentic information which potentially leads to bias when analyzing the results. Generally speaking, our project was successful in exploring the relationship between suicide death rate and depresion prevalence among *"Age"*, *"Race"*, and *"Gender"*.
 
 Reference
