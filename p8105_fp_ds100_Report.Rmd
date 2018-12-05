@@ -331,7 +331,10 @@ summary(fit_suicide) %>%
 ### Suicide Model Analysis
 Using injury data, we first calculate __suicide death rate = (Deaths \ Population) * 100000__ which represents the number of deaths caused by suicide per 100,000 units population. Then, we transform sex, race, age, year into factor variables for future regression model building. 
 
-Then, we construct regression for suicide death rate as response, sex, race, age(in years), year as predictor. By observing the coefficients estimates and p-values, there is several interesting finds for suicide death rates:    
+Then, we construct regression for suicide death rate as response, sex, race, age(in years), year as predictor. By observing the coefficients estimates and p-values, there is several interesting finds for suicide death rates:      
+
+__Suicide Death Rate = 7.84 - 12.565 I{sex = female} - 0.912 I{race = Non-Hispanic black} + 10.313 I{race = Non-Hispanic white} + 7.745 I{25 < age < 44} + 7.531 I{45 < age < 64} + 6.362 I{age >= 65} + 0.212 I{year = 2012} + 0.215 I{year = 2013} + 0.707 I{year = 2014} + 0.778 I{year = 2015} + 1.05 I{year = 2016}__
+  
 1. sex has **significant** p-value < 0.0001: there is significant difference of suicide rate between male and female group and female tends to have lower suicide death rate.   
 2. race of Non-Hispanic white has **significant** p-value: there is significant difference of suicide rate between Non-hispanic Whites and Hispanic and Non-hispanic Black have non-significant difference with Hispanic. Whites tend to have higher suicide death rate compared to Hispanic and Blacks.   
 3. all groups of age(in years) have **significant** p-value: there is significant difference between all age groups with baseline age group(age < 25).    
@@ -385,7 +388,9 @@ fit_age %>% aov(.) %>% TukeyHSD()
 #### Model Analysis
 Because of the data structure of brfss data, the age, gender, race are independent characteristics of the participants to the study, we have to build 3 seperate model for independent analysis. And the data_value(in %) represents the proportion of people have depression.
 
-**Age Model**:    
+**Age Model**:  
+__Depression Rate = 16.486 + 2.31 I{25 < age < 44} + 4.528 I{45 < age < 64} - 2.125 I{age >= 65}__
+  
 1.  There is significant difference in the depression propotion between age group <25 and each other age group including 25-44, 45-64, 65+.   
 2.  All pairwise comparison showed a significant p-value between each age groups while 25-44, 45-64 ages showed an increased depression proportion and 65+ showed a decreased depression proportion.  
 3.  The adjusted $R^2$ = 0.2617 indicates that 
@@ -420,7 +425,9 @@ fit_gender %>% aov(.) %>% TukeyHSD()
 ```
 
 #### Model Analysis
-**Gender Model**:   
+**Gender Model**:  
+__Depression Rate = 13.66 + 9.028 I{gender = female}__
+  
 1.  There is significant difference in the depression propotion between male and female. And female indicates a higher depression proportion than male.  
 2.  The adjusted $R^2$ = 0.6146 indicates that 
 61.46% of variability of the depression proportion is explained by the model only includes gender as predictor.
@@ -444,7 +451,7 @@ fit_race = lm(data_value ~ race_ethnicity, data = new_brfss_race)
 summary(fit_race) %>% 
   broom::tidy() %>% 
   select(term, estimate, p.value) %>%
-  mutate(term = str_replace(term, "^gender", "gender: "))%>% 
+  mutate(term = str_replace(term, "^race_ethnicity", "race: "))%>% 
   knitr::kable(digits = 3)
 
 fit_race %>% aov(.) %>% TukeyHSD()
@@ -454,6 +461,8 @@ fit_race %>% aov(.) %>% TukeyHSD()
 
 #### Model Analysis
 **Race Model**:   
+__Depression Rate = 17.511 - 1.716 I{race = Black, non-Hispanic} + 1.901 I{race = White, non-Hispanic}__  
+    
 1.  There is significant difference in the depression propotion between Hispantic and Non-Hispanic Black, Hispantic and Non-Hispanic White.   
 2.  All pairwise comparison showed a significant p-value between each race groups while Whites have higher depression proportion than Hispanics and Blacks and Blacks have lower depression proportion than Hispanics.   
 3.  The adjusted $R^2$ = 0.1081 indicates that 
