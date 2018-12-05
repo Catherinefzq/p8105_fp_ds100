@@ -80,6 +80,9 @@ brfss_gender = brfss_data %>%
 
 As we will do our following analysis by age, race, and gender, we created three tidy subsets by age, race, and gender.
 
+Injury Data Cleaning
+--------------------
+
 ``` r
  injury_data = read_csv("./data/NCHS_-_Injury_Mortality__United_States.csv") %>% 
   janitor::clean_names() %>%   # tidy the variable names
@@ -123,55 +126,60 @@ Exploring by 'Gender':
 
 Surprisingly, even female appears to have more depression, their suicide rate is much lower than male. Could this give a hint that women are more endurable to depression?
 
-Additional analysis:
-====================
-
 Regression Model Analysis
 -------------------------
 
+To maintain comparability between injury mechanism and depression(brfss) data, we only generate statistic results for:
+
+-   race:
+    -   Hispanic*(baseline)*
+    -   Non-Hispanic Black
+    -   Non-Hispanic White
+-   age groups(in years):
+    -   &lt; 25*(baseline)*
+    -   25-44
+    -   45-64
+    -   65+
+-   sex/gender:
+    -   = 0 if male*(baseline)*
+    -   = 1 if female
+-   year:
+    -   2011*(baseline)*
+    -   2012
+    -   2013
+    -   2014
+    -   2015
+    -   2016
+
 ### Suicide rate model
 
-    ## 
-    ## Call:
-    ## lm(formula = suicide_dr ~ sex + race + age_group_years + year, 
-    ##     data = new_injury)
-    ## 
-    ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -18.0264  -3.9721  -0.2391   4.3182  19.5502 
-    ## 
-    ## Coefficients:
-    ##                        Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)              7.8401     1.4606   5.368 2.16e-07 ***
-    ## sex1                   -12.5646     0.8808 -14.265  < 2e-16 ***
-    ## raceNon-Hispanic black  -0.9120     1.0787  -0.845    0.399    
-    ## raceNon-Hispanic white  10.3133     1.0787   9.561  < 2e-16 ***
-    ## age_group_years25–44     7.4750     1.3212   5.658 5.14e-08 ***
-    ## age_group_years45–64     7.5308     1.3212   5.700 4.15e-08 ***
-    ## age_group_years65+       6.3625     1.0787   5.898 1.51e-08 ***
-    ## year2012                 0.2121     1.5256   0.139    0.890    
-    ## year2013                 0.2150     1.5256   0.141    0.888    
-    ## year2014                 0.7065     1.5256   0.463    0.644    
-    ## year2015                 0.7782     1.5256   0.510    0.611    
-    ## year2016                 1.0499     1.5256   0.688    0.492    
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 6.472 on 204 degrees of freedom
-    ## Multiple R-squared:  0.6589, Adjusted R-squared:  0.6405 
-    ## F-statistic: 35.82 on 11 and 204 DF,  p-value: < 2.2e-16
+| term                     |  estimate|  p.value|
+|:-------------------------|---------:|--------:|
+| (Intercept)              |     7.840|    0.000|
+| sex: 1                   |   -12.565|    0.000|
+| race: Non-Hispanic black |    -0.912|    0.399|
+| race: Non-Hispanic white |    10.313|    0.000|
+| age group years: 25–44   |     7.475|    0.000|
+| age group years: 45–64   |     7.531|    0.000|
+| age group years: 65+     |     6.362|    0.000|
+| year: 2012               |     0.212|    0.890|
+| year: 2013               |     0.215|    0.888|
+| year: 2014               |     0.707|    0.644|
+| year: 2015               |     0.778|    0.611|
+| year: 2016               |     1.050|    0.492|
 
-    ## 
-    ##  Pairwise comparisons using t tests with pooled SD 
-    ## 
-    ## data:  new_injury$suicide_dr and new_injury$age_group_years 
-    ## 
-    ##       <25    25–44  45–64 
-    ## 25–44 0.0030 -      -     
-    ## 45–64 0.0027 1.0000 -     
-    ## 65+   0.0017 1.0000 1.0000
-    ## 
-    ## P value adjustment method: bonferroni
+### Suicide Model Analysis
+
+Using injury data, we first calculate **suicide death rate = (Deaths  Population) \* 100000** which represents the number of deaths caused by suicide per 100,000 units population. Then, we transform sex, race, age, year into factor variables for future regression model building.
+
+Then, we construct regression for suicide death rate as response, sex, race, age(in years), year as predictor. By observing the coefficients estimates and p-values, there is several interesting finds for suicide death rates:
+1. sex has **significant** p-value &lt; 0.0001: there is significant difference of suicide rate between male and female group and female tends to have lower suicide death rate.
+2. race of Non-Hispanic white has **significant** p-value: there is significant difference of suicide rate between Non-hispanic Whites and Hispanic and Non-hispanic Black have non-significant difference with Hispanic. Whites tend to have higher suicide death rate compared to Hispanic and Blacks.
+3. all groups of age(in years) have **significant** p-value: there is significant difference between all age groups with baseline age group(age &lt; 25).
+4. all years have **non-significant** p-value: there is not significant difference between all years with year 2011.
+5. the model produced an adjusted *R*<sup>2</sup> = 0.6405, which represents there are 64% of the variability of the suicide rate are explained by the fitted model and data after adjusted and it's a acceptable proportion for the model.
+
+#### Pairwise comparison
 
     ##   Tukey multiple comparisons of means
     ##     95% family-wise confidence level
@@ -219,30 +227,23 @@ Regression Model Analysis
     ## 2016-2014 0.343424632 -4.045606 4.732455 0.9999199
     ## 2016-2015 0.271713841 -4.117317 4.660744 0.9999749
 
+Then, we make pairwise comparison with Bonferroni and Tukey for race, age and year groups. Findings:
+1. **Race**: Non-Hispanic White and Hispanic, Non-Hispanic White and Black have significant different suicide death rate. White have the highest suicide death rate among 3 race groups. And Blacks have smaller suicide death rate compared to Hispanic and Whites.
+2. **Age**: 25-44 and &lt;25, 45-64 and &lt;25, 65+ and &lt;25 have significant different suicide death rate. Age groups that are &gt;25 all have higher suicide death rate compared to age &lt;25. And age 65+ have smaller suicide death rate compared to 25-44, 45-64 groups.
+3. **Year**: All pairwise comparison for years don't generate significant result, meaning there is no significant different suicide death rate in different years.
+
 ### Depression model
 
 #### Age model
 
-    ## 
-    ## Call:
-    ## lm(formula = data_value ~ age_group, data = new_brfss_age)
-    ## 
-    ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -13.3957  -2.5113   0.0043   2.5862  13.9343 
-    ## 
-    ## Coefficients:
-    ##                Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)     16.4857     0.2267  72.721  < 2e-16 ***
-    ## age_group25-44   2.3100     0.2766   8.353  < 2e-16 ***
-    ## age_group45-64   4.5281     0.2766  16.373  < 2e-16 ***
-    ## age_group65+    -2.1254     0.3186  -6.671 3.31e-11 ***
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 3.991 on 1894 degrees of freedom
-    ## Multiple R-squared:  0.2629, Adjusted R-squared:  0.2617 
-    ## F-statistic: 225.2 on 3 and 1894 DF,  p-value: < 2.2e-16
+| term              |  estimate|  p.value|
+|:------------------|---------:|--------:|
+| (Intercept)       |    16.486|        0|
+| age\_group: 25-44 |     2.310|        0|
+| age\_group: 45-64 |     4.528|        0|
+| age\_group: 65+   |    -2.125|        0|
+
+##### Pairwise comparison
 
     ##   Tukey multiple comparisons of means
     ##     95% family-wise confidence level
@@ -258,26 +259,21 @@ Regression Model Analysis
     ## 65+-25-44   -4.435386 -5.140451 -3.730321     0
     ## 65+-45-64   -6.653481 -7.358546 -5.948416     0
 
+#### Model Analysis
+
+Because of the data structure of brfss data, the age, gender, race are independent characteristics of the participants to the study, we have to build 3 seperate model for independent analysis. And the data\_value(in %) represents the proportion of people have depression.
+
+**Age Model**:
+1. There is significant difference in the depression propotion between age group &lt;25 and each other age group including 25-44, 45-64, 65+.
+2. All pairwise comparison showed a significant p-value between each age groups while 25-44, 45-64 ages showed an increased depression proportion and 65+ showed a decreased depression proportion.
+3. The adjusted *R*<sup>2</sup> = 0.2617 indicates that 26.17% of variability of the depression proportion is explained by the model only includes age groups as predictor.
+
 #### Gender model
 
-    ## 
-    ## Call:
-    ## lm(formula = data_value ~ gender, data = new_brfss_gender)
-    ## 
-    ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -15.8788  -2.0525   0.1596   2.3746  10.0112 
-    ## 
-    ## Coefficients:
-    ##             Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)  13.6604     0.2002   68.24   <2e-16 ***
-    ## gender1       9.0283     0.2831   31.89   <2e-16 ***
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 3.576 on 636 degrees of freedom
-    ## Multiple R-squared:  0.6152, Adjusted R-squared:  0.6146 
-    ## F-statistic:  1017 on 1 and 636 DF,  p-value: < 2.2e-16
+| term        |  estimate|  p.value|
+|:------------|---------:|--------:|
+| (Intercept) |    13.660|        0|
+| gender: 1   |     9.028|        0|
 
     ##   Tukey multiple comparisons of means
     ##     95% family-wise confidence level
@@ -288,29 +284,21 @@ Regression Model Analysis
     ##         diff      lwr      upr p adj
     ## 1-0 9.028339 8.472382 9.584295     0
 
+#### Model Analysis
+
+**Gender Model**:
+1. There is significant difference in the depression propotion between male and female. And female indicates a higher depression proportion than male.
+2. The adjusted *R*<sup>2</sup> = 0.6146 indicates that 61.46% of variability of the depression proportion is explained by the model only includes gender as predictor.
+
 #### Race model
 
     ## Warning: Outer names are only allowed for unnamed scalar atomic inputs
 
-    ## 
-    ## Call:
-    ## lm(formula = data_value ~ race_ethnicity, data = new_brfss_race)
-    ## 
-    ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -11.9123  -2.7648  -0.3959   2.2608  17.2341 
-    ## 
-    ## Coefficients:
-    ##                                   Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)                        17.5115     0.2518  69.554  < 2e-16 ***
-    ## race_ethnicityBlack, non-Hispanic  -1.7156     0.3722  -4.609 4.68e-06 ***
-    ## race_ethnicityWhite, non-Hispanic   1.9009     0.3456   5.500 5.08e-08 ***
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 4.175 on 815 degrees of freedom
-    ## Multiple R-squared:  0.1103, Adjusted R-squared:  0.1081 
-    ## F-statistic: 50.51 on 2 and 815 DF,  p-value: < 2.2e-16
+| term                               |  estimate|  p.value|
+|:-----------------------------------|---------:|--------:|
+| (Intercept)                        |    17.511|        0|
+| race\_ethnicityBlack, non-Hispanic |    -1.716|        0|
+| race\_ethnicityWhite, non-Hispanic |     1.901|        0|
 
     ##   Tukey multiple comparisons of means
     ##     95% family-wise confidence level
@@ -327,58 +315,7 @@ Regression Model Analysis
     ## White, non-Hispanic-Hispanic            2.0e-07
     ## White, non-Hispanic-Black, non-Hispanic 0.0e+00
 
-### Analysis Report
-
-To maintain comparability between injury mechanism and depression(brfss) data, we only generate statistic results for:
-
--   race:
-    -   Hispanic*(baseline)*
-    -   Non-Hispanic Black
-    -   Non-Hispanic White
--   age groups(in years):
-    -   &lt; 25*(baseline)*
-    -   25-44
-    -   45-64
-    -   65+
--   sex/gender:
-    -   = 0 if male*(baseline)*
-    -   = 1 if female
--   year:
-    -   2011*(baseline)*
-    -   2012
-    -   2013
-    -   2014
-    -   2015
-    -   2016
-
-### Suicide Model
-
-Using injury data, we first calculate **suicide death rate = (Deaths  Population) \* 100000** which represents the number of deaths caused by suicide per 100,000 units population. Then, we transform sex, race, age, year into factor variables for future regression model building.
-
-Then, we construct regression for suicide death rate as response, sex, race, age(in years), year as predictor. By observing the coefficients estimates and p-values, there is several interesting finds for suicide death rates:
-1. sex has **significant** p-value &lt; 0.0001: there is significant difference of suicide rate between male and female group and female tends to have lower suicide death rate.
-2. race of Non-Hispanic white has **significant** p-value: there is significant difference of suicide rate between Non-hispanic Whites and Hispanic and Non-hispanic Black have non-significant difference with Hispanic. Whites tend to have higher suicide death rate compared to Hispanic and Blacks.
-3. all groups of age(in years) have **significant** p-value: there is significant difference between all age groups with baseline age group(age &lt; 25).
-4. all years have **non-significant** p-value: there is not significant difference between all years with year 2011.
-5. the model produced an adjusted *R*<sup>2</sup> = 0.6405, which represents there are 64% of the variability of the suicide rate are explained by the fitted model and data after adjusted and it's a acceptable proportion for the model.
-
-Then, we make pairwise comparison with Bonferroni and Tukey for race, age and year groups. Findings:
-1. **Race**: Non-Hispanic White and Hispanic, Non-Hispanic White and Black have significant different suicide death rate. White have the highest suicide death rate among 3 race groups. And Blacks have smaller suicide death rate compared to Hispanic and Whites.
-2. **Age**: 25-44 and &lt;25, 45-64 and &lt;25, 65+ and &lt;25 have significant different suicide death rate. Age groups that are &gt;25 all have higher suicide death rate compared to age &lt;25. And age 65+ have smaller suicide death rate compared to 25-44, 45-64 groups.
-3. **Year**: All pairwise comparison for years don't generate significant result, meaning there is no significant different suicide death rate in different years.
-
-### Depression Model
-
-Because of the data structure of brfss data, the age, gender, race are independent characteristics of the participants to the study, we have to build 3 seperate model for independent analysis. And the data\_value(in %) represents the proportion of people have depression.
-
-**Age Model**:
-1. There is significant difference in the depression propotion between age group &lt;25 and each other age group including 25-44, 45-64, 65+.
-2. All pairwise comparison showed a significant p-value between each age groups while 25-44, 45-64 ages showed an increased depression proportion and 65+ showed a decreased depression proportion.
-3. The adjusted *R*<sup>2</sup> = 0.2617 indicates that 26.17% of variability of the depression proportion is explained by the model only includes age groups as predictor.
-
-**Gender Model**:
-1. There is significant difference in the depression propotion between male and female. And female indicates a higher depression proportion than male.
-2. The adjusted *R*<sup>2</sup> = 0.6146 indicates that 61.46% of variability of the depression proportion is explained by the model only includes gender as predictor.
+#### Model Analysis
 
 **Race Model**:
 1. There is significant difference in the depression propotion between Hispantic and Non-Hispanic Black, Hispantic and Non-Hispanic White.
@@ -387,7 +324,11 @@ Because of the data structure of brfss data, the age, gender, race are independe
 
 ### Additional Analysis for Location:
 
+<<<<<<< HEAD
 ![](p8105_fp_ds100_Report_files/figure-markdown_github/unnamed-chunk-7-1.png) In addition to investigating the trend of depression prevalence under the category of *"Age"*, *"Race"*, and *"Gender"*, we are also interested in examining if there is a difference in depression proportion across states of the U.S. Based on the graph, a remarkable finding is that Virgin Islands has the lowest proportion of depression compared to other locations and the difference is quite significant. According to our research, the state population consists of over 70% Black race, and linking back to our visualizations and regression model results, they are consistent with each other since Blacks tend to have the lowest depression prevalence relative the others race groups included in our analysis.
+=======
+![](p8105_fp_ds100_Report_files/figure-markdown_github/unnamed-chunk-9-1.png)
+>>>>>>> 74585d1c142284f6ea3d2ca1d7226578ff3c9209
 
 Discussion:
 ===========
