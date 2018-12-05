@@ -56,7 +56,8 @@ brfss_data = brfss_raw %>%
 
 The original dataset contains 1,386,855 rows and 27 column. For further use, we make a preliminary dataset. The preliminary dataset contains 8931 rows and 14 columns. We save the preliminary dataset in our data file. The complete data dictionary is linked above.
 
-## Further cleaning
+### Further cleaning
+
 ```{r eval=TRUE, echo=TRUE, message=FALSE}
 # load the preliminary dataset
 brfss_data = read.csv("./data/brfss_data.csv") 
@@ -82,7 +83,11 @@ brfss_gender = brfss_data %>%
 
 As we will do our following analysis by age, race, and gender, we created three tidy subsets by age, race, and gender. 
 
-## Injury Data Cleaning
+## NCHS - Injury Mortality: United States 
+
+Data from the NCHS - Injury Mortality: United States were accessed from data.cdc.gov. This dataset describes injury mortality in the United States beginning in 1999. Two concepts are included in the circumstances of an injury death: intent of injury and mechanism of injury. In our project, we focus on intent of injury, specifically suicide. Data are based on information from all resident death certificates filed in the 50 states and the District of Columbia.
+
+### Data Cleaning
 
 ```{r eval=TRUE, echo=TRUE, message=FALSE}
  injury_data = read_csv("./data/NCHS_-_Injury_Mortality__United_States.csv") %>% 
@@ -94,10 +99,7 @@ As we will do our following analysis by age, race, and gender, we created three 
                 # filtering only data from 2011-2016 for further comparison analysis with another dataset.
  
 ```
-The original dataset contains 98280 rows and 17 columns.  For further use, we make a preliminary dataset. The preliminary dataset contains 504 rows and 7 columns. Each row includes the information of the mortality rate for specific age,sex,gender group who attempted suicide during specific year. 
-
-
-
+The original dataset contains 98280 rows and 17 columns.  For further use, we make a preliminary dataset. The preliminary dataset contains 216 rows and 7 columns. Each row includes the information of the mortality rate for specific age,sex,gender group who attempted suicide during specific year. 
 
 # Exploratory analysis:
 
