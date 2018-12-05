@@ -394,7 +394,7 @@ To maintain comparability between injury mechanism and depression(brfss) data, w
     + 2016
 
 ### Suicide Model
-Using injury data, we first calculate suicide death rate = (Deaths \ Population) * 100000 which represents the number of deaths caused by suicide per 100,000 units population. Then, we transform sex, race, age, year into factor variables for future regression model building. 
+Using injury data, we first calculate __suicide death rate = (Deaths \ Population) * 100000__ which represents the number of deaths caused by suicide per 100,000 units population. Then, we transform sex, race, age, year into factor variables for future regression model building. 
 
 Then, we construct regression for suicide death rate as response, sex, race, age(in years), year as predictor. By observing the coefficients estimates and p-values, there is several interesting finds for suicide death rates:    
 1. sex has **significant** p-value < 0.0001: there is significant difference of suicide rate between male and female group and female tends to have lower suicide death rate.   
@@ -414,7 +414,7 @@ Because of the data structure of brfss data, the age, gender, race are independe
 
 **Age Model**:    
 1.  There is significant difference in the depression propotion between age group <25 and each other age group including 25-44, 45-64, 65+.   
-2.  All pairwise comparison showed a significant p-value between each age groups while 25-44, 45-64 ages showed an increased depression proportion and 65+ showed a decreased depression proportion.
+2.  All pairwise comparison showed a significant p-value between each age groups while 25-44, 45-64 ages showed an increased depression proportion and 65+ showed a decreased depression proportion.  
 3.  The adjusted $R^2$ = 0.2617 indicates that 
 26.17% of variability of the depression proportion is explained by the model only includes age groups as predictor.
 
@@ -425,7 +425,7 @@ Because of the data structure of brfss data, the age, gender, race are independe
 
 **Race Model**:   
 1.  There is significant difference in the depression propotion between Hispantic and Non-Hispanic Black, Hispantic and Non-Hispanic White.   
-2.  All pairwise comparison showed a significant p-value between each race groups while Whites have higher depression proportion than Hispanics and Blacks and Blacks have lower depression proportion than Hispanics.
+2.  All pairwise comparison showed a significant p-value between each race groups while Whites have higher depression proportion than Hispanics and Blacks and Blacks have lower depression proportion than Hispanics.   
 3.  The adjusted $R^2$ = 0.1081 indicates that 
 10.81% of variability of the depression proportion is explained by the model only includes race groups as predictor.
 
@@ -455,23 +455,6 @@ location_depression %>%
 
 ```
 
-
-**Location Model**:   
-
-#### Location
-```{r}
-new_brfss_location =
-  brfss_data %>% 
-  filter(year %in% c(2011, 2012, 2013, 2014, 2015, 2016),
-         data_value != "") %>%
-  select(locationabbr, data_value) %>% 
-  mutate(locationabbr = as.factor(locationabbr))
-
-fit_location = lm(data_value ~ locationabbr, data = new_brfss_location)
-summary(fit_location)
-
-```
-From model output, we observe that almost all p-value except for VI are non-significant. However, the model generates a negative adjusted $R^2$, which indicates that the explanation towards depression proportion is low or neglibible and it shows the insignificance of explanatory variables for location as predictors, thus, we can't get analytical result for location in the data.
 
 
 # Discussion:

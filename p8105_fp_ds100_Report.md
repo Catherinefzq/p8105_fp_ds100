@@ -353,7 +353,7 @@ To maintain comparability between injury mechanism and depression(brfss) data, w
 
 ### Suicide Model
 
-Using injury data, we first calculate suicide death rate = (Deaths  Population) \* 100000 which represents the number of deaths caused by suicide per 100,000 units population. Then, we transform sex, race, age, year into factor variables for future regression model building.
+Using injury data, we first calculate **suicide death rate = (Deaths  Population) \* 100000** which represents the number of deaths caused by suicide per 100,000 units population. Then, we transform sex, race, age, year into factor variables for future regression model building.
 
 Then, we construct regression for suicide death rate as response, sex, race, age(in years), year as predictor. By observing the coefficients estimates and p-values, there is several interesting finds for suicide death rates:
 1. sex has **significant** p-value &lt; 0.0001: there is significant difference of suicide rate between male and female group and female tends to have lower suicide death rate.
@@ -373,7 +373,8 @@ Because of the data structure of brfss data, the age, gender, race are independe
 
 **Age Model**:
 1. There is significant difference in the depression propotion between age group &lt;25 and each other age group including 25-44, 45-64, 65+.
-2. All pairwise comparison showed a significant p-value between each age groups while 25-44, 45-64 ages showed an increased depression proportion and 65+ showed a decreased depression proportion. 3. The adjusted *R*<sup>2</sup> = 0.2617 indicates that 26.17% of variability of the depression proportion is explained by the model only includes age groups as predictor.
+2. All pairwise comparison showed a significant p-value between each age groups while 25-44, 45-64 ages showed an increased depression proportion and 65+ showed a decreased depression proportion.
+3. The adjusted *R*<sup>2</sup> = 0.2617 indicates that 26.17% of variability of the depression proportion is explained by the model only includes age groups as predictor.
 
 **Gender Model**:
 1. There is significant difference in the depression propotion between male and female. And female indicates a higher depression proportion than male.
@@ -381,88 +382,12 @@ Because of the data structure of brfss data, the age, gender, race are independe
 
 **Race Model**:
 1. There is significant difference in the depression propotion between Hispantic and Non-Hispanic Black, Hispantic and Non-Hispanic White.
-2. All pairwise comparison showed a significant p-value between each race groups while Whites have higher depression proportion than Hispanics and Blacks and Blacks have lower depression proportion than Hispanics. 3. The adjusted *R*<sup>2</sup> = 0.1081 indicates that 10.81% of variability of the depression proportion is explained by the model only includes race groups as predictor.
+2. All pairwise comparison showed a significant p-value between each race groups while Whites have higher depression proportion than Hispanics and Blacks and Blacks have lower depression proportion than Hispanics.
+3. The adjusted *R*<sup>2</sup> = 0.1081 indicates that 10.81% of variability of the depression proportion is explained by the model only includes race groups as predictor.
 
 ### Additional Analysis for Location:
 
 ![](p8105_fp_ds100_Report_files/figure-markdown_github/unnamed-chunk-7-1.png)
-
-**Location Model**:
-
-#### Location
-
-    ## 
-    ## Call:
-    ## lm(formula = data_value ~ locationabbr, data = new_brfss_location)
-    ## 
-    ## Residuals:
-    ##    Min     1Q Median     3Q    Max 
-    ## -70.19 -32.46  17.36  31.10  47.15 
-    ## 
-    ## Coefficients:
-    ##                Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)     52.0795     2.6267  19.827   <2e-16 ***
-    ## locationabbrAL  -1.0037     3.6783  -0.273   0.7850    
-    ## locationabbrAR  -1.3201     3.6842  -0.358   0.7201    
-    ## locationabbrAZ  -0.7942     3.6499  -0.218   0.8277    
-    ## locationabbrCA  -1.8370     3.6282  -0.506   0.6127    
-    ## locationabbrCO  -1.8079     3.6282  -0.498   0.6183    
-    ## locationabbrCT  -1.1232     3.6444  -0.308   0.7579    
-    ## locationabbrDC   0.6745     3.7210   0.181   0.8562    
-    ## locationabbrDE  -0.3059     3.7210  -0.082   0.9345    
-    ## locationabbrFL  -0.8257     3.6499  -0.226   0.8210    
-    ## locationabbrGA  -1.0166     3.6902  -0.275   0.7830    
-    ## locationabbrGU   2.6608     3.8031   0.700   0.4842    
-    ## locationabbrHI  -0.6717     3.7085  -0.181   0.8563    
-    ## locationabbrIA   0.3229     3.7744   0.086   0.9318    
-    ## locationabbrID  -1.6049     3.7605  -0.427   0.6696    
-    ## locationabbrIL  -0.3283     3.7085  -0.089   0.9295    
-    ## locationabbrIN  -1.4267     3.6611  -0.390   0.6968    
-    ## locationabbrKS  -1.7913     3.6499  -0.491   0.6236    
-    ## locationabbrKY  -0.9849     3.6842  -0.267   0.7892    
-    ## locationabbrLA  -1.1200     3.7147  -0.302   0.7630    
-    ## locationabbrMA  -1.4216     3.6611  -0.388   0.6978    
-    ## locationabbrMD  -1.1564     3.6444  -0.317   0.7510    
-    ## locationabbrME  -1.6176     3.7404  -0.432   0.6654    
-    ## locationabbrMI  -1.8709     3.6389  -0.514   0.6072    
-    ## locationabbrMN  -1.8913     3.6389  -0.520   0.6033    
-    ## locationabbrMO  -1.3637     3.6611  -0.372   0.7095    
-    ## locationabbrMS  -0.7819     3.8180  -0.205   0.8377    
-    ## locationabbrMT  -1.8526     3.7339  -0.496   0.6198    
-    ## locationabbrNC  -1.5185     3.6555  -0.415   0.6779    
-    ## locationabbrND  -0.4930     3.8105  -0.129   0.8971    
-    ## locationabbrNE  -1.5546     3.6555  -0.425   0.6706    
-    ## locationabbrNH  -0.0380     3.7885  -0.010   0.9920    
-    ## locationabbrNJ  -0.1616     3.6902  -0.044   0.9651    
-    ## locationabbrNM  -1.5157     3.6842  -0.411   0.6808    
-    ## locationabbrNV  -0.8684     3.6725  -0.236   0.8131    
-    ## locationabbrNY  -1.5356     3.6444  -0.421   0.6735    
-    ## locationabbrOH  -1.2405     3.6725  -0.338   0.7355    
-    ## locationabbrOK  -1.7938     3.6611  -0.490   0.6242    
-    ## locationabbrOR  -1.5649     3.7147  -0.421   0.6736    
-    ## locationabbrPA  -1.5138     3.6783  -0.412   0.6807    
-    ## locationabbrPR  -1.7694     4.0333  -0.439   0.6609    
-    ## locationabbrRI  -1.4663     3.6842  -0.398   0.6906    
-    ## locationabbrSC  -1.4500     3.6499  -0.397   0.6912    
-    ## locationabbrSD  -0.3590     3.7958  -0.095   0.9246    
-    ## locationabbrTN  -0.1111     3.7605  -0.030   0.9764    
-    ## locationabbrTX  -1.0115     3.6725  -0.275   0.7830    
-    ## locationabbrUT  -0.6714     3.6668  -0.183   0.8547    
-    ## locationabbrVA  -0.8111     3.6725  -0.221   0.8252    
-    ## locationabbrVI  22.7534     8.9352   2.547   0.0109 *  
-    ## locationabbrVT  -1.7315     3.7274  -0.465   0.6423    
-    ## locationabbrWA  -1.8983     3.6178  -0.525   0.5998    
-    ## locationabbrWI  -0.1239     3.6902  -0.034   0.9732    
-    ## locationabbrWV  -1.0851     3.7537  -0.289   0.7725    
-    ## locationabbrWY  -1.3778     3.7814  -0.364   0.7156    
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 31.96 on 7941 degrees of freedom
-    ## Multiple R-squared:  0.001586,   Adjusted R-squared:  -0.005078 
-    ## F-statistic: 0.238 on 53 and 7941 DF,  p-value: 1
-
-From model output, we observe that almost all p-value except for VI are non-significant. However, the model generates a negative adjusted *R*<sup>2</sup>, which indicates that the explanation towards depression proportion is low or neglibible and it shows the insignificance of explanatory variables for location as predictors, thus, we can't get analytical result for location in the data.
 
 Discussion:
 ===========
