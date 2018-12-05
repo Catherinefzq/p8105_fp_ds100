@@ -273,8 +273,10 @@ Because of the data structure of brfss data, the age, gender, race are independe
 **Depression Rate = 16.486 + 2.31 I{25 &lt; age &lt; 44} + 4.528 I{45 &lt; age &lt; 64} - 2.125 I{age &gt;= 65}**
 
 1.  There is significant difference in the depression propotion between age group &lt;25 and each other age group including 25-44, 45-64, 65+.
-2.  All pairwise comparison showed a significant p-value between each age group while 25-44, 45-64 ages showed an increased depression proportion and 65+ showed a decreased depression proportion.
-3.  The adjusted *R*<sup>2</sup> = 0.2617 indicates that 26.17% of variability of the depression proportion is explained by the model only includes age groups as predictor.
+
+2.  All pairwise comparison showed a significant p-value between each age groups while 25-44, 45-64 ages showed an increased depression proportion and 65+ showed a decreased depression proportion relative to the reference level being &lt;25 years old.
+
+3.  The adjusted *R*<sup>2</sup> = 0.2617 indicates that 26.17% of variability of the depression proportion is explained by the model only including age groups as its predictor.
 
 #### Gender model
 
@@ -338,7 +340,7 @@ Because of the data structure of brfss data, the age, gender, race are independe
 
 ![](p8105_fp_ds100_Report_files/figure-markdown_github/unnamed-chunk-9-1.png)
 
-In addition to investigating the trend of depression prevalence under the category of *"Age"*, *"Race"*, and *"Gender"*, we are also interested in examining if there is a difference in depression proportion across states of the U.S. Based on the graph, a remarkable finding is that Virgin Islands has the lowest proportion of depression compared to other locations and the difference is quite significant. According to our research, the state population consists of over 70% Black race, and linking back to our visualizations and regression model results, they are consistent with each other since Blacks tend to have the lowest depression prevalence relative the others race groups included in our analysis.
+In addition to investigating the trend of depression prevalence under the category of *"Age"*, *"Race"*, and *"Gender"*, we are also interested in examining if there is a difference in depression proportion across states of the U.S. Based on the graph, a remarkable finding is that Virgin Islands has the lowest proportion of depression compared to other locations and the difference is quite significant. According to our research, the state ethinicity group consists of over 70% Black race(<https://en.wikipedia.org/wiki/United_States_Virgin_Islands>), and linking back to our visualizations and regression model results, they are consistent with each other since Blacks tend to have the lowest depression prevalence relative the others race groups included in our analysis.
 
 Discussion
 ==========
@@ -347,9 +349,9 @@ From 2011 through 2016, the general trend for depression prevalence in US increa
 
 People older than 65 have relatively low prevalence of depression but high suicide rate. On the contray,Black people have both low depression prevalence and low suicide rate. White people have high depression prevalence and high suicide rate . Women are reported to have higher prevalence of depression compared to men, while keep a relatively low death rate of suicide rate. Any apparent difference of trend on the two plot might suggest other causal factors in the 'causal pies'.
 
-Our results obtained from the regression models agree mostly with the patterns found in the visualization plots stratified by *"Age"*, *"Race"*, and *"Gender"* by looking at the estimated coefficients for each model parameter and comparing their magnitude and signs with the reference factor level. However, by looking at the fitted regression for suicide death rate, we can see that the term 'year' is not a significant predictor and thus should be removed from the model. This means that although suicide death rates appears to be gradually increasing from 2011 to 2016, there is not enough statistical evidence to show that the change is significant. Overall, we recommend the final model to be **Suicide Death Rate ~ Age + Race + Gender**
+Our results obtained from the regression models agree mostly with the patterns found in the visualization plots by looking at the estimated coefficients for each model parameter and comparing their magnitude and signs with the reference factor level. However, by looking at the fitted regression for suicide death rate, it can be observed that the term 'year' is not a significant predictor and thus should be removed from the model. This means that although suicide death rates appears to be gradually increasing from 2011 to 2016, there is not enough statistical evidence to show that the change is significant. Overall, we recommend the final model to be **Suicide Death Rate ~ Age + Race + Gender**
 
-On the other hand, for the simple linear regressions to predict depression prevalence, *"Age"*, *"Race"*, and *"Gender"* are all significant covariates. This supports our conclusion that suicide death rate and depression prevalence do vary among these proposed factors. However, the direct association between depression and suicide may be difficult to test. For rare cases like suicide, case-control study should be a suitable way to conduct the research, while the psychological status like depression are really complicated to detect, especially for suicide cases.
+On the other hand, for the simple linear regressions to predict depression prevalence, *"Age"*, *"Race"*, and *"Gender"* are all significant covariates. This supports our initial hypothesis that suicide death rate and depression prevalence do vary among these proposed factors. However, the direct association between depression and suicide may be difficult to test. For rare cases like suicide, case-control study should be a suitable way to conduct the research by carefully selecting the cases and controls and examining their odds ratio of being exposed to depression. The challenge is that psychological status such as depression is hardly detected accurately, and people may not be willing to report authentic information which potentially leads to bias when analyzing the results. Generally speaking, our project was successful in exploring the relationship between suicide death rate and depresion prevalence among *"Age"*, *"Race"*, and *"Gender"*.
 
 Reference
 =========
