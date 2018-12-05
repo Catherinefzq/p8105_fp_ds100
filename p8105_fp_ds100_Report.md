@@ -11,7 +11,7 @@ Suicide is a leading cause of death in the US. Suicide rates increased in nearly
 Related work:
 =============
 
-Suicide has ranked as the 10th leading cause of death among Americans for many years. <https://www.verywellmind.com/suicide-rates-overstated-in-people-with-depression-2330503>
+Suicide has ranked as the 10th leading cause of death among Americans for many years. Here is the link for report that inspired us. <https://afsp.org/about-suicide/suicide-statistics/> This report summarizes the suicide rates by race and age. In addition, they also include the most common suicide methods and data for suicide attempts.
 
 Initial questions:
 ==================
@@ -368,7 +368,7 @@ On the other hand, for the simple linear regressions to predict depression preva
 Reference
 =========
 
-\[1\] Holmes, L. (2018). Has the Rate of Suicide in the U.S. Risen? Retrieved from <https://www.verywellmind.com/suicide-rates-overstated-in-people-with-depression-2330503>
+\[1\] American Foundation for Suicide Prevention (2018). Suicide Statistics Retrieved from <https://afsp.org/about-suicide/suicide-statistics/>
 
 \[2\] Vijayakumar L. (2015). Suicide in women. Indian journal of psychiatry, 57(Suppl 2), S233-8.
 
